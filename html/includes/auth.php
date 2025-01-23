@@ -1,16 +1,16 @@
 <?php
-    session_start();
+session_start();
 
-    $user_id = trim($_SESSION['loginid'] ?? '');
-    $username = trim($_SESSION['user_name'] ?? '');
-    $isAdmin = trim($_SESSION['role'] ?? '');
+$user_id = trim($_SESSION['loginid'] ?? '');
+$username = trim($_SESSION['user_name'] ?? '');
+$isAdmin = trim($_SESSION['role'] ?? '');
 
-    if (empty($user_id)) {
-        header("Location:login.php");
-        exit();
-    }
+if (empty($user_id)) {
+    header("Location:login.php");
+    exit();
+}
 
-    function isAdmin() {
-        return $isAdmin;
-    }
-?>
+function isAdmin()
+{
+    return $isAdmin;
+}
