@@ -15,13 +15,16 @@ require_once 'includes/top.php';
 <head>
     <meta charset="utf-8" />
     <title>トップ画面</title>
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
 
 <body>
     <?php include 'templates/header.php'; ?>
-    <p>登録されているトピックス(最新5件)</p>
-    <a href="topics-ins.php">トピックス新規登録</a>
+    <div class="flex justify-between items-center space-x-4">
+        <a href="topics-ins.php" class="inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300">トピックス新規登録</a>
+        <p>登録されているトピックス(最新5件)</p>
+    </div>
     <?php
     // DBへの接続設定
     $dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
@@ -43,33 +46,34 @@ require_once 'includes/top.php';
         // SQLを実行
         $stmt = $pdo->prepare($topic_sql);
         $stmt->execute();
-
         // 結果の出力
-        echo "<table border='1'>";
-        echo "<tr>
-                <th>種類</th>
-                <th>対象</th>
-                <th>タイトル</th>
-                <th>コメント件数</th>
-                <th>編集</th>
-                <th>削除</th>
-              </tr>";
+        echo '<table class="min-w-full table-auto bg-white border border-gray-200 rounded-lg shadow-md">';
+        echo '<thead>
+                <tr>
+                    <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">種類</th>
+                    <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">対象</th>
+                    <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">タイトル</th>
+                    <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">コメント件数</th>
+                    <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">編集</th>
+                    <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">削除</th>
+                </tr>
+               </thead><tbody>';
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $id = htmlspecialchars($row['topic_id'], ENT_QUOTES, 'UTF-8');
             $title = htmlspecialchars($row['topic_title'], ENT_QUOTES, 'UTF-8');
             $target = htmlspecialchars($row['topic_target_name'], ENT_QUOTES, 'UTF-8');
             $category = htmlspecialchars($row['topic_category_name'], ENT_QUOTES, 'UTF-8');
 
-            echo "<tr>";
-            echo "<td>" . htmlspecialchars($row['topic_category_name'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo "<td>" . htmlspecialchars($row['topic_target_name'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo "<td><a href='topics-dtl.php?i={$id}&t={$title}&c={$category}&a={$target}'>{$title}</a></td>";
-            echo "<td>" . htmlspecialchars($row['コメント件数'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo "<td><a href='topics-upd.php?i={$id}&t={$title}&c={$category}&a={$target}'>編集</a></td>";
-            echo "<td><a href='topics-del.php?i={$id}&t={$title}&c={$category}&a={$target}'>削除</a></td>";
+            echo '<tr class="bg-gray-50">';
+            echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['topic_category_name'], ENT_QUOTES, 'UTF-8') . "</td>";
+            echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['topic_target_name'], ENT_QUOTES, 'UTF-8') . "</td>";
+            echo "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-dtl.php?i={$id}&t={$title}&c={$category}&a={$target}'>{$title}</a></td>";
+            echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['コメント件数'], ENT_QUOTES, 'UTF-8') . "</td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-upd.php?i={$id}&t={$title}&c={$category}&a={$target}'>編集</a></td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-del.php?i={$id}&t={$title}&c={$category}&a={$target}'>削除</a></td>";
             echo "</tr>";
         }
-        echo "</table>";
+        echo "</tbody></table>";
     } catch (PDOException $e) {
         echo "接続失敗: " . $e->getMessage() . "<br>";
     } finally {
@@ -77,8 +81,10 @@ require_once 'includes/top.php';
         $pdo = null;
     }
     ?>
-    <p>登録されているメディア(最新5件)</p>
-    <a href="media-ins.php">メディア新規登録</a>
+    <div class="flex justify-between items-center space-x-4">
+        <a href="media-ins.php" class="inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300">メディア新規登録</a>
+        <p>登録されているメディア(最新5件)</p>
+    </div>
     <?php
     // DBへの接続設定
     $dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
@@ -101,28 +107,30 @@ require_once 'includes/top.php';
         $stmt->execute();
 
         // 結果の出力
-        echo "<table border='1'>";
-        echo "<tr>
-                <th>種類</th>
-                <th>対象</th>
-                <th>タイトル</th>
-                <th>コメント件数</th>
-                <th>編集</th>
-                <th>削除</th>
-              </tr>";
+        echo '<table class="min-w-full table-auto bg-white border border-gray-200 rounded-lg shadow-md">';
+        echo '<thead>
+                <tr>
+                    <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">種類</th>
+                    <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">対象</th>
+                    <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">タイトル</th>
+                    <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">コメント件数</th>
+                    <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">編集</th>
+                    <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">削除</th>
+                </tr>
+               </thead><tbody>';
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $id = htmlspecialchars($row['media_id'], ENT_QUOTES, 'UTF-8');
             $title = htmlspecialchars($row['media_title'], ENT_QUOTES, 'UTF-8');
             $target = htmlspecialchars($row['media_target_name'], ENT_QUOTES, 'UTF-8');
             $category = htmlspecialchars($row['media_category_name'], ENT_QUOTES, 'UTF-8');
 
-            echo "<tr>";
-            echo "<td>" . htmlspecialchars($row['media_category_name'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo "<td>" . htmlspecialchars($row['media_target_name'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo "<td><a href='media-dtl.php?i={$id}&t={$title}&c={$category}&a={$target}'>{$title}</a></td>";
-            echo "<td>" . htmlspecialchars($row['コメント件数'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo "<td><a href='media-upd.php?i={$id}&t={$title}&c={$category}&a={$target}'>編集</a></td>";
-            echo "<td><a href='media-del.php?i={$id}&t={$title}&c={$category}&a={$target}'>削除</a></td>";
+            echo '<tr class="bg-gray-50">';
+            echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['media_category_name'], ENT_QUOTES, 'UTF-8') . "</td>";
+            echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['media_target_name'], ENT_QUOTES, 'UTF-8') . "</td>";
+            echo "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='medias-dtl.php?i={$id}&t={$title}&c={$category}&a={$target}'>{$title}</a></td>";
+            echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['コメント件数'], ENT_QUOTES, 'UTF-8') . "</td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='medias-upd.php?i={$id}&t={$title}&c={$category}&a={$target}'>編集</a></td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='medias-del.php?i={$id}&t={$title}&c={$category}&a={$target}'>削除</a></td>";
             echo "</tr>";
         }
         echo "</table>";
