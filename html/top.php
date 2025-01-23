@@ -86,56 +86,12 @@ require_once 'includes/top.php';
     $pass = "user01";
 
     // SQL文
-    $media_sql = 'SELECT 
-    Users.user_id, 
-    Users.user_name, 
-    Users.user_level, 
-    Medias.media_id, 
-    Medias.media_title, 
-    Media_category.media_category_name, 
-    Media_target.media_target_name, 
-    Topics.topic_id, 
-    Topics.topic_title, 
-    Topic_category.topic_category_name, 
-    Topic_target.topic_target_name, 
-    Topic_comment.topic_comment, 
-    COUNT(Media_comment.media_comment) AS media_comment_count, 
-    Tags.tag_name, 
-    Media_comment.media_comment
-FROM 
-    Users
-INNER JOIN Medias ON Users.user_id = Medias.user_id
-INNER JOIN Media_category ON Medias.media_category_id = Media_category.media_category_id
-INNER JOIN Media_target ON Medias.media_target_id = Media_target.media_target_id
-LEFT JOIN Topics ON Users.user_id = Topics.user_id
-LEFT JOIN Topic_category ON Topics.topic_id = Topic_category.topic_id
-LEFT JOIN Topic_target ON Topics.topic_id = Topic_target.topic_id
-LEFT JOIN Topic_comment ON Topics.topic_id = Topic_comment.topic_id
-LEFT JOIN Media_comment ON Medias.media_id = Media_comment.media_id
-LEFT JOIN Media_tags ON Medias.media_id = Media_tags.media_id
-LEFT JOIN Tags ON Media_tags.tag_id = Tags.tag_id
-GROUP BY 
-    Users.user_id, 
-    Users.user_name, 
-    Users.user_level, 
-    Medias.media_id, 
-    Medias.media_title, 
-    Media_category.media_category_name, 
-    Media_target.media_target_name, 
-    Topics.topic_id, 
-    Topics.topic_title, 
-    Topic_category.topic_category_name, 
-    Topic_target.topic_target_name, 
-    Topic_comment.topic_comment, 
-    Tags.tag_name, 
-    Media_comment.media_comment
-ORDER BY 
-    Medias.created_at DESC,
-    Medias.media_id DESC, 
-    Topics.topic_id DESC
-LIMIT 5
-;';
-
+    $media_sql = 'SELECT medias.media_id,media_category.media_category_name,media_target.media_target_name,medias.media_title,COALESCE(A.コメント件数,0) AS コメント件数 FROM `medias` 
+                    LEFT JOIN (SELECT media_id,COUNT(*) as コメント件数 FROM media_comment GROUP BY media_id) as A ON medias.media_id=A.media_id 
+                    LEFT JOIN media_target ON medias.media_id=media_target.media_id 
+                    LEFT JOIN `media_category` ON medias.media_id = media_category.media_id 
+                    LEFT JOIN `media_tags` ON medias.media_id = media_tags.media_id 
+                    ORDER BY medias.created_at DESC LIMIT 5';
     try {
         // PDOオブジェクトを生成して接続
         $pdo = new PDO($dsn, $user, $pass);
@@ -155,10 +111,10 @@ LIMIT 5
                 <th>削除</th>
               </tr>";
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $id = htmlspecialchars($row['topic_id'], ENT_QUOTES, 'UTF-8');
-            $title = htmlspecialchars($row['topic_title'], ENT_QUOTES, 'UTF-8');
-            $target = htmlspecialchars($row['topic_target_name'], ENT_QUOTES, 'UTF-8');
-            $category = htmlspecialchars($row['topic_category_name'], ENT_QUOTES, 'UTF-8');
+            $id = htmlspecialchars($row['media_id'], ENT_QUOTES, 'UTF-8');
+            $title = htmlspecialchars($row['media_title'], ENT_QUOTES, 'UTF-8');
+            $target = htmlspecialchars($row['media_target_name'], ENT_QUOTES, 'UTF-8');
+            $category = htmlspecialchars($row['media_category_name'], ENT_QUOTES, 'UTF-8');
 
             echo "<tr>";
             echo "<td>" . htmlspecialchars($row['media_category_name'], ENT_QUOTES, 'UTF-8') . "</td>";
