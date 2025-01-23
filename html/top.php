@@ -86,12 +86,12 @@ require_once 'includes/top.php';
     $pass = "user01";
 
     // SQL文
-    $media_sql = 'SELECT medias.media_id,media_category.media_category_name,media_target.media_target_name,medias.media_title,COALESCE(A.コメント件数,0) AS コメント件数 FROM `medias` 
-                    LEFT JOIN (SELECT media_id,COUNT(*) as コメント件数 FROM media_comment GROUP BY media_id) as A ON medias.media_id=A.media_id 
-                    LEFT JOIN media_target ON medias.media_id=media_target.media_id 
-                    LEFT JOIN `media_category` ON medias.media_id = media_category.media_id 
-                    LEFT JOIN `media_tags` ON medias.media_id = media_tags.media_id 
-                    ORDER BY medias.created_at DESC LIMIT 5';
+    $media_sql = 'SELECT media.media_id,media_category.media_category_name,media_target.media_target_name,media.media_title,COALESCE(A.コメント件数,0) AS コメント件数 FROM `media` 
+                    LEFT JOIN (SELECT media_id,COUNT(*) as コメント件数 FROM media_comment GROUP BY media_id) as A ON media.media_id=A.media_id 
+                    LEFT JOIN media_target ON media.media_id=media_target.media_id 
+                    LEFT JOIN `media_category` ON media.media_id = media_category.media_id 
+                    LEFT JOIN `media_tags` ON media.media_id = media_tags.media_id 
+                    ORDER BY media.created_at DESC LIMIT 5';
     try {
         // PDOオブジェクトを生成して接続
         $pdo = new PDO($dsn, $user, $pass);
@@ -120,7 +120,7 @@ require_once 'includes/top.php';
             echo "<td>" . htmlspecialchars($row['media_category_name'], ENT_QUOTES, 'UTF-8') . "</td>";
             echo "<td>" . htmlspecialchars($row['media_target_name'], ENT_QUOTES, 'UTF-8') . "</td>";
             echo "<td><a href='media-dtl.php?i={$id}&t={$title}&c={$category}&a={$target}'>{$title}</a></td>";
-            echo "<td>" . htmlspecialchars($row['media_comment_count'], ENT_QUOTES, 'UTF-8') . "</td>";
+            echo "<td>" . htmlspecialchars($row['コメント件数'], ENT_QUOTES, 'UTF-8') . "</td>";
             echo "<td><a href='media-upd.php?i={$id}&t={$title}&c={$category}&a={$target}'>編集</a></td>";
             echo "<td><a href='media-del.php?i={$id}&t={$title}&c={$category}&a={$target}'>削除</a></td>";
             echo "</tr>";
