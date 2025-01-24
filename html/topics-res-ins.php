@@ -1,4 +1,10 @@
 <?php
+// エラーを出力する
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+?>
+<?php
+require_once 'includes/auth.php';
 require_once 'includes/helpers.php';
 require_once 'includes/topics.php';
 
@@ -13,6 +19,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $category = $_POST['category'] ?? $category;
     $target = $_POST['target'] ?? $target;
 }
+// エラーメッセージの初期化
+$errors = [];
+$success_message = "";
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -140,7 +150,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($stmt->execute()) {
             echo "挿入成功";
         } else {
-            echo $result;
             echo "挿入失敗";
         }
         // foreachの値を変数に格納したい
