@@ -10,12 +10,18 @@ function fetchTotalComments($mediaId)
     return $stmt->fetchColumn();
 }
 
-function fetchComments($mediaId, $itemsPerPage, $offset)
-{
+function fetchComments($mediaId, $itemsPerPage, $offset) {
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare('
-        SELECT media_comment, created_at 
-        FROM Media_comment 
+        SELECT 
+            media_comment_id,
+            comment_category,
+            media_comment AS comment, 
+            user_name, 
+            media_comment.created_at 
+        FROM media_comment 
+        INNER JOIN users 
+            ON media_comment.user_id = users.user_id 
         WHERE media_id = :media_id
         LIMIT :limit OFFSET :offset
     ');
