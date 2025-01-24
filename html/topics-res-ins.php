@@ -65,7 +65,7 @@ $target = sanitizeInput($_GET['a'] ?? '');
                             <label for="" class="">登録番号:</label>
                         </dt>
                         <dd class="ml-64">
-                            <?= $topic_id ?>
+                            登録番号
                         </dd>
                     </dl>
                     <dl class="py-2">
@@ -73,7 +73,7 @@ $target = sanitizeInput($_GET['a'] ?? '');
                             <label for="" class="">タイトル:</label>
                         </dt>
                         <dd class="ml-64">
-                            <?= $title ?>
+                            タイトル
                         </dd>
                     </dl>
                     <dl class="py-2">
@@ -81,7 +81,7 @@ $target = sanitizeInput($_GET['a'] ?? '');
                             <label for="" class="">種類:</label>
                         </dt>
                         <dd class="ml-64">
-                            <?= $category ?>
+                            種類
                         </dd>
                     </dl>
                     <dl class="py-2">
@@ -89,7 +89,7 @@ $target = sanitizeInput($_GET['a'] ?? '');
                             <label for="" class="">対象:</label>
                         </dt>
                         <dd class="ml-64">
-                            <?= $target ?>
+                            てすと
                         </dd>
                     </dl>
                     <dl class="py-2">
@@ -97,7 +97,7 @@ $target = sanitizeInput($_GET['a'] ?? '');
                             <label for="" class="">コメント番号:</label>
                         </dt>
                         <dd class="ml-64">
-                            <input size="5" type="text" name="comment_num" id="comment_num" class="border text-sm p-1 focus:outline-none focus:border-gray-500 focus:ring-0 focus:ring-gray-500">
+                            <input size="5" type="text" name="title" id="title" class="border text-sm p-1 focus:outline-none focus:border-gray-500 focus:ring-0 focus:ring-gray-500">
                         </dd>
                     </dl>
                     <dl class="py-2">
@@ -122,7 +122,8 @@ $target = sanitizeInput($_GET['a'] ?? '');
                             <label for="" class="">コメント:</label>
                         </dt>
                         <dd class="ml-64">
-                            <input size="25" type="text" name="comment" class="h-40 w-60 border text-sm p-1 focus:outline-none focus:border-gray-500 focus:ring-0 focus:ring-gray-500">
+                            <textarea class="w-80 h-40 overflow-y-scroll p-2 text-left resize-none" style="resize: none;">
+                            </textarea>
                         </dd>
                     </dl>
                     <dl class="py-2">
