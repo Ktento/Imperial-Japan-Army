@@ -19,12 +19,14 @@
             <input type="radio" id="user_level" name="user_level" value="一般">一般<br>
             <label for="favtag">タグ:</label>
             <?php
+            $config = require_once 'config/config.php';
+
             //SQL文
             $sql = 'select tag_name from Tags';
             //DBへの接続
-            $dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
-            $user = "user01";
-            $pass = "user01";
+            $dsn = $config['dsn'];
+            $user = $config['user'];
+            $pass = $config['password'];
 
             try {
                 //SQLの実行
@@ -62,9 +64,9 @@
         $sql = 'INSERT INTO Users (`user_id`, `user_name`, `user_password`, `user_icon`, `favtag`, `user_level`)';
         $sql = $sql . 'VALUES (:user_id,:user_name,:user_password,:user_icon,:favtag,:user_level)';
         //DBへの接続
-        $dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
-        $user = "user01";
-        $pass = "user01";
+        $dsn = $config['dsn'];
+        $user = $config['user'];
+        $pass = $config['password'];
         try {
             //SQLの実行
             $user_id = $_POST['user_id'];

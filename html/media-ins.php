@@ -6,6 +6,11 @@ ini_set('error_reporting', E_ALL);
 <?php
 require_once 'includes/auth.php';
 
+$config = require_once 'config/config.php';
+$dsn = $config['dsn'];
+$user= $config['user'];
+$pass= $config['password'];
+
 // エラーメッセージの初期化
 $errors = [];
 $success_message = "";
@@ -32,9 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         try {
             $pdo = new PDO(
-                'mysql:host=localhost;dbname=artifact;charset=utf8',
-                'user01',
-                'user01',
+                $dsn,
+                $user,
+                $pass,
                 [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
             );
 
