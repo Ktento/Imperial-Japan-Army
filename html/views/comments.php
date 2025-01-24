@@ -1,8 +1,8 @@
 <?php foreach ($comments as $comment):
-    $name = htmlspecialchars($comment['name'] ?? "取得できませんでした", ENT_QUOTES, 'UTF-8');
-    $content = htmlspecialchars($comment['topic_comment'] ?? "取得できませんでした", ENT_QUOTES, 'UTF-8');
+    $name = htmlspecialchars($comment['user_name'] ?? "取得できませんでした", ENT_QUOTES, 'UTF-8');
+    $content = htmlspecialchars($comment['comment'] ?? "取得できませんでした", ENT_QUOTES, 'UTF-8');
     $created_at = htmlspecialchars(formatJapaneseDate($comment['created_at']) ?? "取得できませんでした", ENT_QUOTES, 'UTF-8');
-    $category = htmlspecialchars($comment['category'] ?? "取得できませんでした", ENT_QUOTES, 'UTF-8');
+    $category = htmlspecialchars($comment['comment_category'] ?? "取得できませんでした", ENT_QUOTES, 'UTF-8');
 ?>
     <div class="bg-gray-100 py-5 px-6 mb-1 flex relative">
         <div class="absolute top-0 bottom-0 left-3/4 w-0.5 border-l border-dotted border-gray-400 my-4"></div>
