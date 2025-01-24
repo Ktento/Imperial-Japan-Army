@@ -1,4 +1,10 @@
 <?php
+// エラーを出力する
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+?>
+<?php
+require_once 'includes/auth.php';
 require_once 'includes/helpers.php';
 require_once 'includes/topics.php';
 
@@ -6,6 +12,17 @@ $topic_id = sanitizeInput($_GET['i'] ?? '');
 $title = sanitizeInput($_GET['t'] ?? '');
 $category = sanitizeInput($_GET['c'] ?? '');
 $target = sanitizeInput($_GET['a'] ?? '');
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $topic_id = $_POST['comment_id'] ?? $topic_id;
+    $title = $_POST['title'] ?? $title;
+    $category = $_POST['category'] ?? $category;
+    $target = $_POST['target'] ?? $target;
+}
+// エラーメッセージの初期化
+$errors = [];
+$success_message = "";
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -38,7 +55,7 @@ $target = sanitizeInput($_GET['a'] ?? '');
                             <label for="" class="">タイトル:</label>
                         </dt>
                         <dd class="ml-64">
-                            <?= $title ?>
+                            <?= htmlspecialchars($title) ?>
                         </dd>
                     </dl>
                     <dl class="py-2">
@@ -46,7 +63,7 @@ $target = sanitizeInput($_GET['a'] ?? '');
                             <label for="" class="">種類:</label>
                         </dt>
                         <dd class="ml-64">
-                            <?= $category ?>
+                            <?= htmlspecialchars($category) ?>
                         </dd>
                     </dl>
                     <dl class="py-2">
@@ -54,7 +71,7 @@ $target = sanitizeInput($_GET['a'] ?? '');
                             <label for="" class="">対象:</label>
                         </dt>
                         <dd class="ml-64">
-                            <?= $target ?>
+                            <?= htmlspecialchars($target) ?>
                         </dd>
                     </dl>
                     <dl class="py-2">
@@ -133,7 +150,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($stmt->execute()) {
             echo "挿入成功";
         } else {
-            echo $result;
             echo "挿入失敗";
         }
         // foreachの値を変数に格納したい
