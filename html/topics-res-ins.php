@@ -23,7 +23,7 @@ $target = sanitizeInput($_GET['a'] ?? '');
         <?php include 'templates/header.php'; ?>
         <main class="bg-gray-100 p-4 mt-4">
             <h2 class="border-b-2 mb-2 py-2 text-lg">コメント登録</h2>
-            <form action="topics-ins.php" method="POST" class="space-y-3">
+            <form action="topics-res-ins.php" method="POST" class="space-y-3">
                 <fieldset>
                     <dl class="py-2">
                         <dt class="float-left">
