@@ -65,7 +65,7 @@ $target = sanitizeInput($_GET['a'] ?? '');
                             <label for="" class="">登録番号:</label>
                         </dt>
                         <dd class="ml-64">
-                            登録番号
+                            <?= $topic_id ?>
                         </dd>
                     </dl>
                     <dl class="py-2">
@@ -73,7 +73,7 @@ $target = sanitizeInput($_GET['a'] ?? '');
                             <label for="" class="">タイトル:</label>
                         </dt>
                         <dd class="ml-64">
-                            タイトル
+                            <?= $title ?>
                         </dd>
                     </dl>
                     <dl class="py-2">
@@ -81,7 +81,7 @@ $target = sanitizeInput($_GET['a'] ?? '');
                             <label for="" class="">種類:</label>
                         </dt>
                         <dd class="ml-64">
-                            種類
+                            <?= $category ?>
                         </dd>
                     </dl>
                     <dl class="py-2">
@@ -89,7 +89,7 @@ $target = sanitizeInput($_GET['a'] ?? '');
                             <label for="" class="">対象:</label>
                         </dt>
                         <dd class="ml-64">
-                            てすと
+                            <?= $target ?>
                         </dd>
                     </dl>
                     <dl class="py-2">
