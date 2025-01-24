@@ -1,39 +1,4 @@
-<!-- comment upd.php -->
 <?php
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    //SQL文
-    $sql = 'UPDATE topic_comment SET topic_comment=:topic_comment WHERE topic_comment_id=:topic_comment_id';
-    //DBへの接続
-    $dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
-    $user = "user01";
-    $pass = "user01";
-    try {
-        //SQLの実行
-        $topic_comment_id = $_POST['registration-number'];
-        $topic_comment = $_POST['*comment'];
-        $pdo = new PDO($dsn, $user, $pass);
-        //SQLの実行
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':topic_comment_id', $topic_comment_id);
-        $stmt->bindValue(':topic_comment', $topic_comment);
-        if ($stmt->execute()) {
-            echo "更新成功";
-        } else {
-            echo $result;
-            echo "更新失敗";
-        }
-        // foreachの値を変数に格納したい
-    } catch (PDOException $e) {
-        echo "接続失敗: " . $e->getMessage() . "\n";
-    } finally {
-        // DB接続を閉じる
-        $pdo = null;
-    }
-}
-?>
-
-<?php
-require_once 'includes/auth.php';
 require_once 'includes/helpers.php';
 require_once 'includes/topics.php';
 
@@ -97,7 +62,7 @@ $target = sanitizeInput($_GET['a'] ?? '');
                             <label for="" class="">コメント番号:</label>
                         </dt>
                         <dd class="ml-64">
-                            <input size="5" type="text" name="title" id="title" class="border text-sm p-1 focus:outline-none focus:border-gray-500 focus:ring-0 focus:ring-gray-500">
+                            <input size="5" type="text" name="comment_id" id="comment_id" class="border text-sm p-1 focus:outline-none focus:border-gray-500 focus:ring-0 focus:ring-gray-500">
                         </dd>
                     </dl>
                     <dl class="py-2">
@@ -107,11 +72,11 @@ $target = sanitizeInput($_GET['a'] ?? '');
                         <dd class="ml-64">
                             <div class="mt-2 flex items-center gap-2">
                                 <label class="">
-                                    <input type="radio" name="category" value="感想" class="h-4 w-4 text-gray-600 border-gray-300 accent-gray-800">
+                                    <input type="radio" name="comment_category" value="感想" class="h-4 w-4 text-gray-600 border-gray-300 accent-gray-800">
                                     <span class="ml-2 text-gray-700">感想</span>
                                 </label>
                                 <label class="">
-                                    <input type="radio" name="category" value="質問" class="h-4 w-4 text-gray-600 border-gray-300 accent-gray-800">
+                                    <input type="radio" name="comment_category" value="質問" class="h-4 w-4 text-gray-600 border-gray-300 accent-gray-800">
                                     <span class="ml-2 text-gray-700">質問</span>
                                 </label>
                             </div>
@@ -122,7 +87,7 @@ $target = sanitizeInput($_GET['a'] ?? '');
                             <label for="" class="">コメント:</label>
                         </dt>
                         <dd class="ml-64">
-                            <textarea class="w-80 h-40 overflow-y-scroll p-2 text-left resize-none" style="resize: none;">
+                            <textarea name="topic_comment" class="w-80 h-40 overflow-y-scroll p-2 text-left resize-none" style="resize: none;">
                             </textarea>
                         </dd>
                     </dl>
@@ -142,3 +107,41 @@ $target = sanitizeInput($_GET['a'] ?? '');
 </body>
 
 </html>
+
+<?php
+require_once 'includes/auth.php';
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    //SQL文
+    $sql = 'INSERT INTO topic_comment(topic_comment_id,topic_id, user_id, comment_category, topic_comment) VALUES(:topic_comment_id,:topic_id, :user_id, :comment_category, :topic_comment)';
+    //DBへの接続
+    $dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
+    $user = "user01";
+    $pass = "user01";
+    try {
+        //SQLの実行
+        $topic_comment_id = $_POST['comment_id'];
+        $comment_category = $_POST['comment_category'];
+        $topic_comment = $_POST['topic_comment'];
+        $pdo = new PDO($dsn, $user, $pass);
+        //SQLの実行
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':topic_comment_id', $topic_comment_id);
+        $stmt->bindValue(':topic_id', $topic_id);
+        $stmt->bindValue(':user_id', $user_id);
+        $stmt->bindValue(':comment_category', $comment_category);
+        $stmt->bindValue(':topic_comment', $topic_comment);
+        if ($stmt->execute()) {
+            echo "挿入成功";
+        } else {
+            echo $result;
+            echo "挿入失敗";
+        }
+        // foreachの値を変数に格納したい
+    } catch (PDOException $e) {
+        echo "接続失敗: " . $e->getMessage() . "\n";
+    } finally {
+        // DB接続を閉じる
+        $pdo = null;
+    }
+}
+?>
