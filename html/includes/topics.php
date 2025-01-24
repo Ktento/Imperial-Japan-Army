@@ -13,7 +13,7 @@ function fetchComments($topicId, $itemsPerPage, $offset) {
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare('
         SELECT 
-            topic_comment_id,
+            topic_comment_id AS comment_id,
             comment_category,
             topic_comment AS comment, 
             user_name, 

@@ -14,7 +14,7 @@ function fetchComments($mediaId, $itemsPerPage, $offset) {
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare('
         SELECT 
-            media_comment_id,
+            media_comment_id AS comment_id,
             comment_category,
             media_comment AS comment, 
             user_name, 
