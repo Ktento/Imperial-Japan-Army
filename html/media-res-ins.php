@@ -1,5 +1,8 @@
 <?php
 require_once 'includes/auth.php';
+require_once 'includes/helpers.php';
+require_once 'includes/topics.php';
+
 
 // comment insert.php
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -58,6 +61,8 @@ echo "a: " . var_dump($a) . "<br>";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>メディアへコメント登録</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/path/to/common.css">
 </head>
 <body>
 <?php include 'templates/header.php'; ?>
