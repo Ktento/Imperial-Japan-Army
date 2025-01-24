@@ -1,4 +1,5 @@
 <?php foreach ($comments as $comment):
+    $comment_id
     $name = htmlspecialchars($comment['user_name'] ?? "取得できませんでした", ENT_QUOTES, 'UTF-8');
     $content = htmlspecialchars($comment['comment'] ?? "取得できませんでした", ENT_QUOTES, 'UTF-8');
     $created_at = htmlspecialchars(formatJapaneseDate($comment['created_at']) ?? "取得できませんでした", ENT_QUOTES, 'UTF-8');
