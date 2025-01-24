@@ -9,6 +9,8 @@ require_once 'includes/auth.php';
 require_once 'includes/helpers.php';
 require_once 'includes/media.php';
 
+$filename = "media";
+
 $media_id = sanitizeInput($_GET['i'] ?? '');
 $title = sanitizeInput($_GET['t'] ?? '');
 $category = sanitizeInput($_GET['c'] ?? '');
