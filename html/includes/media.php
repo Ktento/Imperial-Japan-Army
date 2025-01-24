@@ -1,7 +1,8 @@
 <?php
 require_once 'db.php';
 
-function fetchTotalComments($mediaId) {
+function fetchTotalComments($mediaId)
+{
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare('SELECT COUNT(*) FROM Media_comment WHERE media_id = :media_id');
     $stmt->bindValue(':media_id', $mediaId, PDO::PARAM_INT);
@@ -9,7 +10,8 @@ function fetchTotalComments($mediaId) {
     return $stmt->fetchColumn();
 }
 
-function fetchComments($mediaId, $itemsPerPage, $offset) {
+function fetchComments($mediaId, $itemsPerPage, $offset)
+{
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare('
         SELECT media_comment, created_at 
@@ -24,7 +26,8 @@ function fetchComments($mediaId, $itemsPerPage, $offset) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function fetchTags($mediaId) {
+function fetchTags($mediaId)
+{
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare('
         SELECT Tags.tag_name
@@ -37,7 +40,8 @@ function fetchTags($mediaId) {
     return $stmt->fetchAll(PDO::FETCH_COLUMN);
 }
 
-function insertMedia($num, $title, $user_id, $category, $target, $tags) {
+function insertMedia($num, $title, $user_id, $category, $target, $tags)
+{
     $pdo = getPDOConnection();
     $errors = [];
 
@@ -55,7 +59,7 @@ function insertMedia($num, $title, $user_id, $category, $target, $tags) {
     $sql = empty($num)
         ? "INSERT INTO Medias (user_id, media_title) VALUES (:user_id, :title)"
         : "INSERT INTO Medias (media_id, user_id, media_title) VALUES (:num, :user_id, :title)";
-    
+
     $stmt = $pdo->prepare($sql);
 
     // パラメータのバインディング
@@ -84,25 +88,27 @@ function insertMedia($num, $title, $user_id, $category, $target, $tags) {
     return $media_id;
 }
 
-function insertTags($media_id, $tags) {
+function insertTags($media_id, $tags)
+{
     $pdo = getPDOConnection();
     foreach ($tags as $tag) {
         // タグを保存（存在しない場合のみ）
         $stmt = $pdo->prepare("INSERT IGNORE INTO Tags (tag_name) VALUES (:name)");
         $stmt->execute([':name' => $tag]);
-        
+
         // ハッシュタグIDを取得
         $stmt = $pdo->prepare("SELECT tag_id FROM Tags WHERE tag_name = :name");
         $stmt->execute([':name' => $tag]);
         $hashtagId = $stmt->fetchColumn();
-        
+
         // 関連付けを保存
         $stmt = $pdo->prepare("INSERT INTO Media_tags (media_id, tag_id) VALUES (:media_id, :tag_id)");
         $stmt->execute([':media_id' => $media_id, ':tag_id' => $hashtagId]);
     }
 }
 
-function insertCategory($media_id, $category) {
+function insertCategory($media_id, $category)
+{
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare("INSERT INTO Media_category (media_id, media_category_name) VALUES (:media_id, :category)");
     $stmt->bindValue(':media_id', $media_id, PDO::PARAM_STR);
@@ -110,7 +116,8 @@ function insertCategory($media_id, $category) {
     $stmt->execute();
 }
 
-function insertTarget($media_id, $target) {
+function insertTarget($media_id, $target)
+{
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare("INSERT INTO Media_target (media_id, media_target_name) VALUES (:media_id, :target)");
     $stmt->bindValue(':media_id', $media_id, PDO::PARAM_STR);
@@ -118,7 +125,8 @@ function insertTarget($media_id, $target) {
     $stmt->execute();
 }
 
-function updateMedia($num, $title, $user_id, $category, $target, $tags) {
+function updateMedia($num, $title, $user_id, $category, $target, $tags)
+{
     $pdo = getPDOConnection();
     $errors = [];
 
@@ -151,10 +159,10 @@ function updateMedia($num, $title, $user_id, $category, $target, $tags) {
     }
 
     return $num;
-
 }
 
-function updateCategory($media_id, $category) {
+function updateCategory($media_id, $category)
+{
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare("UPDATE Media_category SET media_category_name = :category WHERE media_id = :media_id");
     $stmt->bindValue(':media_id', $media_id, PDO::PARAM_STR);
@@ -162,7 +170,8 @@ function updateCategory($media_id, $category) {
     $stmt->execute();
 }
 
-function updateTarget($media_id, $target) {
+function updateTarget($media_id, $target)
+{
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare("UPDATE Media_target SET media_target_name = :target WHERE media_id = :media_id");
     $stmt->bindValue(':media_id', $media_id, PDO::PARAM_STR);
@@ -170,7 +179,8 @@ function updateTarget($media_id, $target) {
     $stmt->execute();
 }
 
-function updateTags($media_id, $tags) {
+function updateTags($media_id, $tags)
+{
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare("DELETE FROM Media_tags WHERE media_id = :media_id");
     $stmt->bindValue(':media_id', $media_id, PDO::PARAM_INT);
@@ -179,7 +189,8 @@ function updateTags($media_id, $tags) {
     insertTags($media_id, $tags);
 }
 
-function deleteMedia($media_id) {
+function deleteMedia($media_id)
+{
     $pdo = getPDOConnection();
     $errors = [];
 
@@ -203,5 +214,3 @@ function deleteMedia($media_id) {
 
     return $media_id;
 }
-
-?>

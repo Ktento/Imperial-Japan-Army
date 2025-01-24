@@ -9,11 +9,11 @@
         <div class="w-3/4 flex justify-between items-start pr-4">
             <div>
                 <p class="text-xs text-gray-600">
-                    <span class="">by 
+                    <span class="">
                         <strong>
                             <a href="#" class="text-black-600"><?= $name ?></a>
                         </strong>
-                        >>
+
                         <?= $created_at ?>
                     </span>
                 </p>

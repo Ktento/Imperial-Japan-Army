@@ -1,6 +1,6 @@
 <?php
 // エラーを出力する
-ini_set( 'display_errors', 1 );
+ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 ?>
 
@@ -32,12 +32,14 @@ require_once 'test/tests.php';
 ?>
 
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>トピックス詳細</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body>
     <div class="p-4 mx-12 max-w-6xl min-w-80 mx-auto">
         <!-- ヘッダー -->
@@ -88,4 +90,5 @@ require_once 'test/tests.php';
         <?php include 'templates/footer.php'; ?>
     </div>
 </body>
+
 </html>

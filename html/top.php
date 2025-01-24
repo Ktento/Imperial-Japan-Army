@@ -127,10 +127,10 @@ require_once 'includes/top.php';
             echo '<tr class="bg-gray-50">';
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['media_category_name'], ENT_QUOTES, 'UTF-8') . "</td>";
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['media_target_name'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='medias-dtl.php?i={$id}&t={$title}&c={$category}&a={$target}'>{$title}</a></td>";
+            echo "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-dtl.php?i={$id}&t={$title}&c={$category}&a={$target}'>{$title}</a></td>";
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['コメント件数'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='medias-upd.php?i={$id}&t={$title}&c={$category}&a={$target}'>編集</a></td>";
-            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='medias-del.php?i={$id}&t={$title}&c={$category}&a={$target}'>削除</a></td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-upd.php?i={$id}&t={$title}&c={$category}&a={$target}'>編集</a></td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-del.php?i={$id}&t={$title}&c={$category}&a={$target}'>削除</a></td>";
             echo "</tr>";
         }
         echo "</table>";
