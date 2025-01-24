@@ -97,7 +97,7 @@ $target = sanitizeInput($_GET['a'] ?? '');
                             <label for="" class="">コメント番号:</label>
                         </dt>
                         <dd class="ml-64">
-                            <input size="5" type="text" name="title" id="title" class="border text-sm p-1 focus:outline-none focus:border-gray-500 focus:ring-0 focus:ring-gray-500">
+                            <input size="5" type="text" name="comment_num" id="comment_num" class="border text-sm p-1 focus:outline-none focus:border-gray-500 focus:ring-0 focus:ring-gray-500">
                         </dd>
                     </dl>
                     <dl class="py-2">
@@ -122,7 +122,7 @@ $target = sanitizeInput($_GET['a'] ?? '');
                             <label for="" class="">コメント:</label>
                         </dt>
                         <dd class="ml-64">
-                            <input size="25" type="text" name="tags" class="h-40 w-60 border text-sm p-1 focus:outline-none focus:border-gray-500 focus:ring-0 focus:ring-gray-500">
+                            <input size="25" type="text" name="comment" class="h-40 w-60 border text-sm p-1 focus:outline-none focus:border-gray-500 focus:ring-0 focus:ring-gray-500">
                         </dd>
                     </dl>
                     <dl class="py-2">
