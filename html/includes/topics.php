@@ -12,8 +12,15 @@ function fetchTotalComments($topicId) {
 function fetchComments($topicId, $itemsPerPage, $offset) {
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare('
-        SELECT topic_comment, created_at 
-        FROM Topic_comment 
+        SELECT 
+            topic_comment_id,
+            comment_category,
+            topic_comment AS comment, 
+            user_name, 
+            topic_comment.created_at 
+        FROM topic_comment 
+        INNER JOIN users 
+            ON topic_comment.user_id = users.user_id 
         WHERE topic_id = :topic_id
         LIMIT :limit OFFSET :offset
     ');
