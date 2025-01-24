@@ -85,7 +85,7 @@ function insertMedia($num, $title, $user_id, $category, $target, $tags)
     try {
         insertCategory($media_id, $category);
         insertTarget($media_id, $target);
-        //insertTags($media_id, $tags);
+        insertTags($media_id, $tags);
     } catch (Exception $e) {
         $errors[] = $e->getMessage();
         return $errors;

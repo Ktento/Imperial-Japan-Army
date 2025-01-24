@@ -82,7 +82,7 @@ function insertTopic($num, $title, $user_id, $category, $target, $tags) {
     try {
         insertCategory($topic_id, $category);
         insertTarget($topic_id, $target);
-        //insertTags($topic_id, $tags);
+        insertTags($topic_id, $tags);
     } catch (Exception $e) {
         $errors[] = $e->getMessage();
         return $errors;
