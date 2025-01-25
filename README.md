@@ -2,7 +2,7 @@
 
 # 開発者向け情報
 
-###　 クエリパラメータの命名規則
+### クエリパラメータの命名規則
 $topic_id -> &ti
 $media_id ->&mi
 &topic_comment_id ->&tci
