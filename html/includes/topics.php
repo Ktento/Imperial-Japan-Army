@@ -22,6 +22,7 @@ function fetchComments($topicId) {
         INNER JOIN users 
             ON topic_comment.user_id = users.user_id 
         WHERE topic_id = :topic_id
+        ORDER BY created_at DESC
     ');
     $stmt->bindValue(':topic_id', $topicId, PDO::PARAM_INT);
     $stmt->execute();

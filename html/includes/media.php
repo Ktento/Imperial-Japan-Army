@@ -23,6 +23,7 @@ function fetchComments($mediaId) {
         INNER JOIN users 
             ON media_comment.user_id = users.user_id 
         WHERE media_id = :media_id
+        ORDER BY created_at DESC
     ');
     $stmt->bindValue(':media_id', $mediaId, PDO::PARAM_INT);
     $stmt->execute();
