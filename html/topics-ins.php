@@ -1,17 +1,20 @@
 <?php
 // エラーを出力する
-ini_set( 'display_errors', 1 );
+ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 ?>
 <?php
+//ログイン状態の有無などの確認
 require_once 'includes/auth.php';
+//ヘルパー関数
 require_once 'includes/topics.php';
 
-// エラーメッセージの初期化
+// エラーメッセージの初期化 
 $errors = [];
 $success_message = "";
-
+//登録ボタンが押された際の処理
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //フォームから送信されたデータを取得
     $register_num = trim($_POST['number'] ?? '');
     $title = trim($_POST['title'] ?? '');
     $category = trim($_POST['category'] ?? '');
@@ -43,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/path/to/common.css">
 </head>
+
 <body>
     <div class="p-4 mx-12 max-w-6xl min-w-80 mx-auto">
         <?php include 'templates/header.php'; ?>
@@ -152,4 +157,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php include 'templates/footer.php'; ?>
     </div>
 </body>
+
 </html>

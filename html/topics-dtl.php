@@ -11,7 +11,7 @@ require_once 'includes/topics.php';
 
 $filename = "topics";
 
-$topic_id = sanitizeInput($_GET['i'] ?? '');
+$topic_id = sanitizeInput($_GET['ti'] ?? '');
 $title = sanitizeInput($_GET['t'] ?? '');
 $category = sanitizeInput($_GET['c'] ?? '');
 $target = sanitizeInput($_GET['a'] ?? '');
@@ -61,7 +61,7 @@ require_once 'test/tests.php';
 
             <!-- アクションボタン -->
             <div class="text-sm text-gray-600 mt-6 flex justify-between mb-2">
-                <a href="topics-res-ins.php?i=<?= $topic_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>" class="border p-2">コメント新規登録</a>
+                <a href="topics-res-ins.php?ti=<?= $topic_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>" class="border p-2">コメント新規登録</a>
                 <?php include 'views/pagenation.php'; ?>
             </div>
 

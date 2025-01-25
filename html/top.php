@@ -60,7 +60,7 @@ $config = require_once 'config/config.php';
                 </tr>
                </thead><tbody>';
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $id = htmlspecialchars($row['topic_id'], ENT_QUOTES, 'UTF-8');
+            $topic_id = htmlspecialchars($row['topic_id'], ENT_QUOTES, 'UTF-8');
             $title = htmlspecialchars($row['topic_title'], ENT_QUOTES, 'UTF-8');
             $target = htmlspecialchars($row['topic_target_name'], ENT_QUOTES, 'UTF-8');
             $category = htmlspecialchars($row['topic_category_name'], ENT_QUOTES, 'UTF-8');
@@ -68,10 +68,10 @@ $config = require_once 'config/config.php';
             echo '<tr class="bg-gray-50">';
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['topic_category_name'], ENT_QUOTES, 'UTF-8') . "</td>";
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['topic_target_name'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-dtl.php?i={$id}&t={$title}&c={$category}&a={$target}'>{$title}</a></td>";
+            echo "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-dtl.php?ti={$topic_id}&t={$title}&c={$category}&a={$target}'>{$title}</a></td>";
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['コメント件数'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-upd.php?i={$id}&t={$title}&c={$category}&a={$target}'>編集</a></td>";
-            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-del.php?i={$id}&t={$title}&c={$category}&a={$target}'>削除</a></td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-upd.php?ti={$topic_id}&t={$title}&c={$category}&a={$target}'>編集</a></td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-del.php?ti={$topic_id}&t={$title}&c={$category}&a={$target}'>削除</a></td>";
             echo "</tr>";
         }
         echo "</tbody></table>";
@@ -119,7 +119,7 @@ $config = require_once 'config/config.php';
                 </tr>
                </thead><tbody>';
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $id = htmlspecialchars($row['media_id'], ENT_QUOTES, 'UTF-8');
+            $media_id = htmlspecialchars($row['media_id'], ENT_QUOTES, 'UTF-8');
             $title = htmlspecialchars($row['media_title'], ENT_QUOTES, 'UTF-8');
             $target = htmlspecialchars($row['media_target_name'], ENT_QUOTES, 'UTF-8');
             $category = htmlspecialchars($row['media_category_name'], ENT_QUOTES, 'UTF-8');
@@ -127,10 +127,10 @@ $config = require_once 'config/config.php';
             echo '<tr class="bg-gray-50">';
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['media_category_name'], ENT_QUOTES, 'UTF-8') . "</td>";
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['media_target_name'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-dtl.php?i={$id}&t={$title}&c={$category}&a={$target}'>{$title}</a></td>";
+            echo "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-dtl.php?mi={$media_id}&t={$title}&c={$category}&a={$target}'>{$title}</a></td>";
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['コメント件数'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-upd.php?i={$id}&t={$title}&c={$category}&a={$target}'>編集</a></td>";
-            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-del.php?i={$id}&t={$title}&c={$category}&a={$target}'>削除</a></td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-upd.php?mi={$media_id}&t={$title}&c={$category}&a={$target}'>編集</a></td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-del.php?mi={$media_id}&t={$title}&c={$category}&a={$target}'>削除</a></td>";
             echo "</tr>";
         }
         echo "</table>";
