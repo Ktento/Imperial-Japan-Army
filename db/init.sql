@@ -525,7 +525,7 @@ ALTER TABLE `media_category`
 -- テーブルの制約 `media_comment`
 --
 ALTER TABLE `media_comment`
-  ADD CONSTRAINT `media_comment_ibfk_1` FOREIGN KEY (`media_id`) REFERENCES `media` (`media_id`),
+  ADD CONSTRAINT `media_comment_ibfk_1` FOREIGN KEY (`media_id`) REFERENCES `media` (`media_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   ADD CONSTRAINT `media_comment_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
 --
@@ -557,7 +557,7 @@ ALTER TABLE `topic_category`
 -- テーブルの制約 `topic_comment`
 --
 ALTER TABLE `topic_comment`
-  ADD CONSTRAINT `topic_comment_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `topics` (`topic_id`),
+  ADD CONSTRAINT `topic_comment_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `topics` (`topic_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   ADD CONSTRAINT `topic_comment_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
 --
