@@ -65,13 +65,20 @@ $config = require_once 'config/config.php';
             $target = htmlspecialchars($row['topic_target_name'], ENT_QUOTES, 'UTF-8');
             $category = htmlspecialchars($row['topic_category_name'], ENT_QUOTES, 'UTF-8');
 
+            $array_tags = fetchTopicTags($topic_id);
+            $tags = htmlspecialchars(implode($array_tags), ENT_QUOTES, 'UTF-8');
+
             echo '<tr class="bg-gray-50">';
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['topic_category_name'], ENT_QUOTES, 'UTF-8') . "</td>";
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['topic_target_name'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-dtl.php?ti={$topic_id}&t={$title}&c={$category}&a={$target}'>{$title}</a></td>";
+            echo "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-dtl.php?ti={$topic_id}&t={$title}&c={$category}&a={$target}'>{$title}</a><div class='flex flex-wrap gap-1'>";
+            foreach ($array_tags as $tag) {
+                echo "<span class='px-1 border text-xs'>{$tag}</span>";
+            }         
+            echo "</div></td>";
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['コメント件数'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-upd.php?ti={$topic_id}&t={$title}&c={$category}&a={$target}'>編集</a></td>";
-            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-del.php?ti={$topic_id}&t={$title}&c={$category}&a={$target}'>削除</a></td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-upd.php?ti={$topic_id}&t={$title}&c={$category}&a={$target}&g={$tags}'>編集</a></td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-del.php?ti={$topic_id}&t={$title}&c={$category}&a={$target}&g={$tags}'>削除</a></td>";
             echo "</tr>";
         }
         echo "</tbody></table>";
@@ -124,13 +131,20 @@ $config = require_once 'config/config.php';
             $target = htmlspecialchars($row['media_target_name'], ENT_QUOTES, 'UTF-8');
             $category = htmlspecialchars($row['media_category_name'], ENT_QUOTES, 'UTF-8');
 
+            $array_tags = fetchMediaTags($media_id);
+            $tags = htmlspecialchars(implode($array_tags), ENT_QUOTES, 'UTF-8');
+
             echo '<tr class="bg-gray-50">';
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['media_category_name'], ENT_QUOTES, 'UTF-8') . "</td>";
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['media_target_name'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-dtl.php?mi={$media_id}&t={$title}&c={$category}&a={$target}'>{$title}</a></td>";
+            echo "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-dtl.php?mi={$media_id}&t={$title}&c={$category}&a={$target}'>{$title}</a><div class='flex flex-wrap gap-1'>";
+            foreach ($array_tags as $tag) {
+                echo "<span class='px-1 border text-xs'>{$tag}</span>";
+            }         
+            echo "</div></td>";
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['コメント件数'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-upd.php?mi={$media_id}&t={$title}&c={$category}&a={$target}'>編集</a></td>";
-            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-del.php?mi={$media_id}&t={$title}&c={$category}&a={$target}'>削除</a></td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-upd.php?mi={$media_id}&t={$title}&c={$category}&a={$target}&g={$tags}'>編集</a></td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-del.php?mi={$media_id}&t={$title}&c={$category}&a={$target}&g={$tags}'>削除</a></td>";
             echo "</tr>";
         }
         echo "</table>";
