@@ -36,7 +36,7 @@ function fetchTags($mediaId)
     $stmt = $pdo->prepare('
         SELECT tags.tag_name
         FROM tags
-        INNER JOIN media_tags ON media_tags.media_tag_id = tags.tag_id
+        INNER JOIN media_tags ON media_tags.tag_id = tags.tag_id
         WHERE media_tags.media_id = :media_id
     ');
     $stmt->bindValue(':media_id', $mediaId, PDO::PARAM_INT);
