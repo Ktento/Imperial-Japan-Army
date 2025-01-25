@@ -37,3 +37,39 @@ function insertComments($topic_comment_id, $topic_id, $user_id, $comment_categor
         $pdo = null;
     }
 }
+
+function deleteComments($topic_comment_id)
+{
+    try {
+        $pdo = getPDOConnection();
+        $stmt = $pdo->prepare("DELETE FROM topic_comment WHERE topic_comment_id = :topic_comment_id");
+        $stmt->bindValue(':topic_comment_id', $topic_comment_id, PDO::PARAM_INT);
+        if (!$stmt->execute()) {
+            $errors[] = "コメントの削除に失敗しました";
+            return $errors;
+        }
+        return $topic_comment_id;
+    } catch (PDOException $e) {
+        echo "接続失敗: " . $e->getMessage() . "\n";
+    } finally {
+        $pdo = null;
+    }
+}
+function updateComments($topic_comment_id, $topic_comment)
+{
+    try {
+        $pdo = getPDOConnection();
+        $stmt = $pdo->prepare("UPDATE topic_comment SET topic_comment = :topic_comment WHERE topic_comment_id = :topic_comment_id");
+        $stmt->bindValue(':topic_comment_id', $topic_comment_id, PDO::PARAM_INT);
+        $stmt->bindValue(':topic_comment', $topic_comment, PDO::PARAM_STR);
+        if (!$stmt->execute()) {
+            $errors[] = "コメントの更新に失敗しました";
+            return $errors;
+        }
+        return $topic_comment_id;
+    } catch (PDOException $e) {
+        echo "接続失敗: " . $e->getMessage() . "\n";
+    } finally {
+        $pdo = null;
+    }
+}
