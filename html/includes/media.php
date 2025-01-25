@@ -10,7 +10,7 @@ function fetchTotalComments($mediaId)
     return $stmt->fetchColumn();
 }
 
-function fetchComments($mediaId, $itemsPerPage, $offset) {
+function fetchComments($mediaId) {
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare('
         SELECT 
@@ -23,11 +23,8 @@ function fetchComments($mediaId, $itemsPerPage, $offset) {
         INNER JOIN users 
             ON media_comment.user_id = users.user_id 
         WHERE media_id = :media_id
-        LIMIT :limit OFFSET :offset
     ');
     $stmt->bindValue(':media_id', $mediaId, PDO::PARAM_INT);
-    $stmt->bindValue(':limit', $itemsPerPage, PDO::PARAM_INT);
-    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }

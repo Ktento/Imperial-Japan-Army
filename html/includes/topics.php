@@ -9,7 +9,7 @@ function fetchTotalComments($topicId) {
     return $stmt->fetchColumn();
 }
 
-function fetchComments($topicId, $itemsPerPage, $offset) {
+function fetchComments($topicId) {
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare('
         SELECT 
@@ -22,11 +22,8 @@ function fetchComments($topicId, $itemsPerPage, $offset) {
         INNER JOIN users 
             ON topic_comment.user_id = users.user_id 
         WHERE topic_id = :topic_id
-        LIMIT :limit OFFSET :offset
     ');
     $stmt->bindValue(':topic_id', $topicId, PDO::PARAM_INT);
-    $stmt->bindValue(':limit', $itemsPerPage, PDO::PARAM_INT);
-    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
