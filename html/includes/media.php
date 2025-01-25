@@ -1,48 +1,55 @@
 <?php
 require_once 'db.php';
 
-function fetchTotalComments($mediaId) {
+function fetchTotalComments($mediaId)
+{
     $pdo = getPDOConnection();
-    $stmt = $pdo->prepare('SELECT COUNT(*) FROM Media_comment WHERE media_id = :media_id');
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM media_comment WHERE media_id = :media_id');
     $stmt->bindValue(':media_id', $mediaId, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchColumn();
 }
 
-function fetchComments($mediaId, $itemsPerPage, $offset) {
+function fetchComments($mediaId) {
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare('
-        SELECT media_comment, created_at 
-        FROM Media_comment 
+        SELECT 
+            media_comment_id AS comment_id,
+            comment_category,
+            media_comment AS comment, 
+            user_name, 
+            media_comment.created_at 
+        FROM media_comment 
+        INNER JOIN users 
+            ON media_comment.user_id = users.user_id 
         WHERE media_id = :media_id
-        LIMIT :limit OFFSET :offset
     ');
     $stmt->bindValue(':media_id', $mediaId, PDO::PARAM_INT);
-    $stmt->bindValue(':limit', $itemsPerPage, PDO::PARAM_INT);
-    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function fetchTags($mediaId) {
+function fetchTags($mediaId)
+{
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare('
-        SELECT Tags.tag_name
-        FROM Tags
-        INNER JOIN Media_tags ON Media_tags.media_tag_id = Tags.tag_id
-        WHERE Media_tags.media_id = :media_id
+        SELECT tags.tag_name
+        FROM tags
+        INNER JOIN media_tags ON media_tags.media_tag_id = tags.tag_id
+        WHERE media_tags.media_id = :media_id
     ');
     $stmt->bindValue(':media_id', $mediaId, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_COLUMN);
 }
 
-function insertMedia($num, $title, $user_id, $category, $target, $tags) {
+function insertMedia($num, $title, $user_id, $category, $target, $tags)
+{
     $pdo = getPDOConnection();
     $errors = [];
 
     // トピックの存在チェック
-    $checkStmt = $pdo->prepare("SELECT media_id FROM Medias WHERE media_id = :media_id");
+    $checkStmt = $pdo->prepare("SELECT media_id FROM medias WHERE media_id = :media_id");
     $checkStmt->bindValue(':media_id', $num, PDO::PARAM_STR);
     $checkStmt->execute();
 
@@ -53,9 +60,9 @@ function insertMedia($num, $title, $user_id, $category, $target, $tags) {
 
     // SQL文の選択
     $sql = empty($num)
-        ? "INSERT INTO Medias (user_id, media_title) VALUES (:user_id, :title)"
-        : "INSERT INTO Medias (media_id, user_id, media_title) VALUES (:num, :user_id, :title)";
-    
+        ? "INSERT INTO medias (user_id, media_title) VALUES (:user_id, :title)"
+        : "INSERT INTO medias (media_id, user_id, media_title) VALUES (:num, :user_id, :title)";
+
     $stmt = $pdo->prepare($sql);
 
     // パラメータのバインディング
@@ -75,7 +82,7 @@ function insertMedia($num, $title, $user_id, $category, $target, $tags) {
     try {
         insertCategory($media_id, $category);
         insertTarget($media_id, $target);
-        //insertTags($media_id, $tags);
+        insertTags($media_id, $tags);
     } catch (Exception $e) {
         $errors[] = $e->getMessage();
         return $errors;
@@ -84,46 +91,50 @@ function insertMedia($num, $title, $user_id, $category, $target, $tags) {
     return $media_id;
 }
 
-function insertTags($media_id, $tags) {
+function insertTags($media_id, $tags)
+{
     $pdo = getPDOConnection();
     foreach ($tags as $tag) {
         // タグを保存（存在しない場合のみ）
-        $stmt = $pdo->prepare("INSERT IGNORE INTO Tags (tag_name) VALUES (:name)");
+        $stmt = $pdo->prepare("INSERT IGNORE INTO tags (tag_name) VALUES (:name)");
         $stmt->execute([':name' => $tag]);
-        
+
         // ハッシュタグIDを取得
-        $stmt = $pdo->prepare("SELECT tag_id FROM Tags WHERE tag_name = :name");
+        $stmt = $pdo->prepare("SELECT tag_id FROM tags WHERE tag_name = :name");
         $stmt->execute([':name' => $tag]);
         $hashtagId = $stmt->fetchColumn();
-        
+
         // 関連付けを保存
-        $stmt = $pdo->prepare("INSERT INTO Media_tags (media_id, tag_id) VALUES (:media_id, :tag_id)");
+        $stmt = $pdo->prepare("INSERT INTO media_tags (media_id, tag_id) VALUES (:media_id, :tag_id)");
         $stmt->execute([':media_id' => $media_id, ':tag_id' => $hashtagId]);
     }
 }
 
-function insertCategory($media_id, $category) {
+function insertCategory($media_id, $category)
+{
     $pdo = getPDOConnection();
-    $stmt = $pdo->prepare("INSERT INTO Media_category (media_id, media_category_name) VALUES (:media_id, :category)");
+    $stmt = $pdo->prepare("INSERT INTO media_category (media_id, media_category_name) VALUES (:media_id, :category)");
     $stmt->bindValue(':media_id', $media_id, PDO::PARAM_STR);
     $stmt->bindValue(':category', $category, PDO::PARAM_STR);
     $stmt->execute();
 }
 
-function insertTarget($media_id, $target) {
+function insertTarget($media_id, $target)
+{
     $pdo = getPDOConnection();
-    $stmt = $pdo->prepare("INSERT INTO Media_target (media_id, media_target_name) VALUES (:media_id, :target)");
+    $stmt = $pdo->prepare("INSERT INTO media_target (media_id, media_target_name) VALUES (:media_id, :target)");
     $stmt->bindValue(':media_id', $media_id, PDO::PARAM_STR);
     $stmt->bindValue(':target', $target, PDO::PARAM_STR);
     $stmt->execute();
 }
 
-function updateMedia($num, $title, $user_id, $category, $target, $tags) {
+function updateMedia($num, $title, $user_id, $category, $target, $tags)
+{
     $pdo = getPDOConnection();
     $errors = [];
 
     // トピックの存在チェック
-    $checkStmt = $pdo->prepare("SELECT media_id FROM Medias WHERE media_id = :media_id");
+    $checkStmt = $pdo->prepare("SELECT media_id FROM medias WHERE media_id = :media_id");
     $checkStmt->bindValue(':media_id', $num, PDO::PARAM_STR);
     $checkStmt->execute();
 
@@ -132,7 +143,7 @@ function updateMedia($num, $title, $user_id, $category, $target, $tags) {
         return $errors;
     }
 
-    $stmt = $pdo->prepare("UPDATE Medias SET media_title = :title WHERE media_id = :num");
+    $stmt = $pdo->prepare("UPDATE medias SET media_title = :title WHERE media_id = :num");
     $stmt->bindValue(':num', $num, PDO::PARAM_INT);
     $stmt->bindValue(':title', $title, PDO::PARAM_STR);
 
@@ -151,40 +162,43 @@ function updateMedia($num, $title, $user_id, $category, $target, $tags) {
     }
 
     return $num;
-
 }
 
-function updateCategory($media_id, $category) {
+function updateCategory($media_id, $category)
+{
     $pdo = getPDOConnection();
-    $stmt = $pdo->prepare("UPDATE Media_category SET media_category_name = :category WHERE media_id = :media_id");
+    $stmt = $pdo->prepare("UPDATE media_category SET media_category_name = :category WHERE media_id = :media_id");
     $stmt->bindValue(':media_id', $media_id, PDO::PARAM_STR);
     $stmt->bindValue(':category', $category, PDO::PARAM_STR);
     $stmt->execute();
 }
 
-function updateTarget($media_id, $target) {
+function updateTarget($media_id, $target)
+{
     $pdo = getPDOConnection();
-    $stmt = $pdo->prepare("UPDATE Media_target SET media_target_name = :target WHERE media_id = :media_id");
+    $stmt = $pdo->prepare("UPDATE media_target SET media_target_name = :target WHERE media_id = :media_id");
     $stmt->bindValue(':media_id', $media_id, PDO::PARAM_STR);
     $stmt->bindValue(':target', $target, PDO::PARAM_STR);
     $stmt->execute();
 }
 
-function updateTags($media_id, $tags) {
+function updateTags($media_id, $tags)
+{
     $pdo = getPDOConnection();
-    $stmt = $pdo->prepare("DELETE FROM Media_tags WHERE media_id = :media_id");
+    $stmt = $pdo->prepare("DELETE FROM media_tags WHERE media_id = :media_id");
     $stmt->bindValue(':media_id', $media_id, PDO::PARAM_INT);
     $stmt->execute();
 
     insertTags($media_id, $tags);
 }
 
-function deleteMedia($media_id) {
+function deleteMedia($media_id)
+{
     $pdo = getPDOConnection();
     $errors = [];
 
     // トピックの存在チェック
-    $checkStmt = $pdo->prepare("SELECT media_id FROM Medias WHERE media_id = :media_id");
+    $checkStmt = $pdo->prepare("SELECT media_id FROM medias WHERE media_id = :media_id");
     $checkStmt->bindValue(':media_id', $media_id, PDO::PARAM_STR);
     $checkStmt->execute();
 
@@ -193,7 +207,7 @@ function deleteMedia($media_id) {
         return $errors;
     }
 
-    $stmt = $pdo->prepare("DELETE FROM Medias WHERE media_id = :media_id");
+    $stmt = $pdo->prepare("DELETE FROM medias WHERE media_id = :media_id");
     $stmt->bindValue(':media_id', $media_id, PDO::PARAM_INT);
 
     if (!$stmt->execute()) {
@@ -203,5 +217,3 @@ function deleteMedia($media_id) {
 
     return $media_id;
 }
-
-?>

@@ -7,12 +7,15 @@
 
 <?php
 //SQL文
-$sql='select * from Users where user_name LIKE :username order by created_at DESC';
+$config = require_once 'config/config.php';
+
+$sql='select * from users where user_name LIKE :username order by created_at DESC';
+
 //DBへの接続
 //DBへの接続
-$dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
-$user="user01";
-$pass="user01";
+$dsn = $config['dsn'];
+$user= $config['user'];
+$pass= $config['password'];
 try {
 	$username = $_POST['username'];
     $pdo = new PDO($dsn,$user,$pass);

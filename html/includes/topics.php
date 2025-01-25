@@ -3,23 +3,27 @@ require_once 'db.php';
 
 function fetchTotalComments($topicId) {
     $pdo = getPDOConnection();
-    $stmt = $pdo->prepare('SELECT COUNT(*) FROM Topic_comment WHERE topic_id = :topic_id');
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM topic_comment WHERE topic_id = :topic_id');
     $stmt->bindValue(':topic_id', $topicId, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchColumn();
 }
 
-function fetchComments($topicId, $itemsPerPage, $offset) {
+function fetchComments($topicId) {
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare('
-        SELECT topic_comment, created_at 
-        FROM Topic_comment 
+        SELECT 
+            topic_comment_id AS comment_id,
+            comment_category,
+            topic_comment AS comment, 
+            user_name, 
+            topic_comment.created_at 
+        FROM topic_comment 
+        INNER JOIN users 
+            ON topic_comment.user_id = users.user_id 
         WHERE topic_id = :topic_id
-        LIMIT :limit OFFSET :offset
     ');
     $stmt->bindValue(':topic_id', $topicId, PDO::PARAM_INT);
-    $stmt->bindValue(':limit', $itemsPerPage, PDO::PARAM_INT);
-    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -27,10 +31,10 @@ function fetchComments($topicId, $itemsPerPage, $offset) {
 function fetchTags($topicId) {
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare('
-        SELECT Tags.tag_name
-        FROM Tags
-        INNER JOIN Topic_tags ON Topic_tags.topic_tag_id = Tags.tag_id
-        WHERE Topic_tags.topic_id = :topic_id
+        SELECT tags.tag_name
+        FROM tags
+        INNER JOIN topic_tags ON topic_tags.topic_tag_id = tags.tag_id
+        WHERE topic_tags.topic_id = :topic_id
     ');
     $stmt->bindValue(':topic_id', $topicId, PDO::PARAM_INT);
     $stmt->execute();
@@ -42,7 +46,7 @@ function insertTopic($num, $title, $user_id, $category, $target, $tags) {
     $errors = [];
 
     // トピックの存在チェック
-    $checkStmt = $pdo->prepare("SELECT topic_id FROM Topics WHERE topic_id = :topic_id");
+    $checkStmt = $pdo->prepare("SELECT topic_id FROM topics WHERE topic_id = :topic_id");
     $checkStmt->bindValue(':topic_id', $num, PDO::PARAM_STR);
     $checkStmt->execute();
 
@@ -53,8 +57,8 @@ function insertTopic($num, $title, $user_id, $category, $target, $tags) {
 
     // SQL文の選択
     $sql = empty($num)
-        ? "INSERT INTO Topics (user_id, topic_title) VALUES (:user_id, :title)"
-        : "INSERT INTO Topics (topic_id, user_id, topic_title) VALUES (:num, :user_id, :title)";
+        ? "INSERT INTO topics (user_id, topic_title) VALUES (:user_id, :title)"
+        : "INSERT INTO topics (topic_id, user_id, topic_title) VALUES (:num, :user_id, :title)";
     
     $stmt = $pdo->prepare($sql);
 
@@ -75,7 +79,7 @@ function insertTopic($num, $title, $user_id, $category, $target, $tags) {
     try {
         insertCategory($topic_id, $category);
         insertTarget($topic_id, $target);
-        //insertTags($topic_id, $tags);
+        insertTags($topic_id, $tags);
     } catch (Exception $e) {
         $errors[] = $e->getMessage();
         return $errors;
@@ -88,23 +92,23 @@ function insertTags($topic_id, $tags) {
     $pdo = getPDOConnection();
     foreach ($tags as $tag) {
         // タグを保存（存在しない場合のみ）
-        $stmt = $pdo->prepare("INSERT IGNORE INTO Tags (tag_name) VALUES (:name)");
+        $stmt = $pdo->prepare("INSERT IGNORE INTO tags (tag_name) VALUES (:name)");
         $stmt->execute([':name' => $tag]);
         
         // ハッシュタグIDを取得
-        $stmt = $pdo->prepare("SELECT tag_id FROM Tags WHERE tag_name = :name");
+        $stmt = $pdo->prepare("SELECT tag_id FROM tags WHERE tag_name = :name");
         $stmt->execute([':name' => $tag]);
         $hashtagId = $stmt->fetchColumn();
         
         // 関連付けを保存
-        $stmt = $pdo->prepare("INSERT INTO Topic_tags (topic_id, tag_id) VALUES (:topic_id, :tag_id)");
+        $stmt = $pdo->prepare("INSERT INTO topic_tags (topic_id, tag_id) VALUES (:topic_id, :tag_id)");
         $stmt->execute([':topic_id' => $topic_id, ':tag_id' => $hashtagId]);
     }
 }
 
 function insertCategory($topic_id, $category) {
     $pdo = getPDOConnection();
-    $stmt = $pdo->prepare("INSERT INTO Topic_category (topic_id, topic_category_name) VALUES (:topic_id, :category)");
+    $stmt = $pdo->prepare("INSERT INTO topic_category (topic_id, topic_category_name) VALUES (:topic_id, :category)");
     $stmt->bindValue(':topic_id', $topic_id, PDO::PARAM_STR);
     $stmt->bindValue(':category', $category, PDO::PARAM_STR);
     $stmt->execute();
@@ -112,7 +116,7 @@ function insertCategory($topic_id, $category) {
 
 function insertTarget($topic_id, $target) {
     $pdo = getPDOConnection();
-    $stmt = $pdo->prepare("INSERT INTO Topic_target (topic_id, topic_target_name) VALUES (:topic_id, :target)");
+    $stmt = $pdo->prepare("INSERT INTO topic_target (topic_id, topic_target_name) VALUES (:topic_id, :target)");
     $stmt->bindValue(':topic_id', $topic_id, PDO::PARAM_STR);
     $stmt->bindValue(':target', $target, PDO::PARAM_STR);
     $stmt->execute();
@@ -123,7 +127,7 @@ function updateTopic($num, $title, $user_id, $category, $target, $tags) {
     $errors = [];
 
     // トピックの存在チェック
-    $checkStmt = $pdo->prepare("SELECT topic_id FROM Topics WHERE topic_id = :topic_id");
+    $checkStmt = $pdo->prepare("SELECT topic_id FROM topics WHERE topic_id = :topic_id");
     $checkStmt->bindValue(':topic_id', $num, PDO::PARAM_STR);
     $checkStmt->execute();
 
@@ -132,7 +136,7 @@ function updateTopic($num, $title, $user_id, $category, $target, $tags) {
         return $errors;
     }
 
-    $stmt = $pdo->prepare("UPDATE Topics SET topic_title = :title WHERE topic_id = :num");
+    $stmt = $pdo->prepare("UPDATE topics SET topic_title = :title WHERE topic_id = :num");
     $stmt->bindValue(':num', $num, PDO::PARAM_INT);
     $stmt->bindValue(':title', $title, PDO::PARAM_STR);
 
@@ -156,7 +160,7 @@ function updateTopic($num, $title, $user_id, $category, $target, $tags) {
 
 function updateCategory($topic_id, $category) {
     $pdo = getPDOConnection();
-    $stmt = $pdo->prepare("UPDATE Topic_category SET topic_category_name = :category WHERE topic_id = :topic_id");
+    $stmt = $pdo->prepare("UPDATE topic_category SET topic_category_name = :category WHERE topic_id = :topic_id");
     $stmt->bindValue(':topic_id', $topic_id, PDO::PARAM_STR);
     $stmt->bindValue(':category', $category, PDO::PARAM_STR);
     $stmt->execute();
@@ -164,7 +168,7 @@ function updateCategory($topic_id, $category) {
 
 function updateTarget($topic_id, $target) {
     $pdo = getPDOConnection();
-    $stmt = $pdo->prepare("UPDATE Topic_target SET topic_target_name = :target WHERE topic_id = :topic_id");
+    $stmt = $pdo->prepare("UPDATE topic_target SET topic_target_name = :target WHERE topic_id = :topic_id");
     $stmt->bindValue(':topic_id', $topic_id, PDO::PARAM_STR);
     $stmt->bindValue(':target', $target, PDO::PARAM_STR);
     $stmt->execute();
@@ -172,7 +176,7 @@ function updateTarget($topic_id, $target) {
 
 function updateTags($topic_id, $tags) {
     $pdo = getPDOConnection();
-    $stmt = $pdo->prepare("DELETE FROM Topic_tags WHERE topic_id = :topic_id");
+    $stmt = $pdo->prepare("DELETE FROM topic_tags WHERE topic_id = :topic_id");
     $stmt->bindValue(':topic_id', $topic_id, PDO::PARAM_INT);
     $stmt->execute();
 
@@ -184,7 +188,7 @@ function deleteTopic($topic_id) {
     $errors = [];
 
     // トピックの存在チェック
-    $checkStmt = $pdo->prepare("SELECT topic_id FROM Topics WHERE topic_id = :topic_id");
+    $checkStmt = $pdo->prepare("SELECT topic_id FROM topics WHERE topic_id = :topic_id");
     $checkStmt->bindValue(':topic_id', $topic_id, PDO::PARAM_STR);
     $checkStmt->execute();
 
@@ -193,7 +197,7 @@ function deleteTopic($topic_id) {
         return $errors;
     }
 
-    $stmt = $pdo->prepare("DELETE FROM Topics WHERE topic_id = :topic_id");
+    $stmt = $pdo->prepare("DELETE FROM topics WHERE topic_id = :topic_id");
     $stmt->bindValue(':topic_id', $topic_id, PDO::PARAM_INT);
 
     if (!$stmt->execute()) {

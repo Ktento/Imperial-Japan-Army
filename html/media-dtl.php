@@ -9,6 +9,8 @@ require_once 'includes/auth.php';
 require_once 'includes/helpers.php';
 require_once 'includes/media.php';
 
+$filename = "media";
+
 $media_id = sanitizeInput($_GET['i'] ?? '');
 $title = sanitizeInput($_GET['t'] ?? '');
 $category = sanitizeInput($_GET['c'] ?? '');
@@ -16,15 +18,10 @@ $target = sanitizeInput($_GET['a'] ?? '');
 
 $comments = null;
 
-$items_per_page = 3;
-$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-
 if ($media_id) {
     $total_comments = fetchTotalComments($media_id);
-    $paginationInfo = getPaginationInfo($total_comments, $items_per_page, $page);
-    $comments = fetchComments($media_id, $items_per_page, $paginationInfo['offset']);
+    $comments = fetchComments($media_id);
     $tags = fetchTags($media_id);
-    $total_pages = (int)ceil($total_comments / $items_per_page) ?? 0;
 }
 
 // デバック用

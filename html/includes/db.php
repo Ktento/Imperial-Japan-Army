@@ -1,7 +1,9 @@
 <?php
+
 function getPDOConnection() {
+    $config = require 'config/config.php';
     try {
-        return new PDO('mysql:host=localhost;dbname=artifact;charset=utf8', 'user01', 'user01', [
+        return new PDO($config['dsn'], $config['user'], $config['password'], [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         ]);
     } catch (PDOException $e) {

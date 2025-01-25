@@ -38,9 +38,10 @@
 </form>
 <?php
 // DBへの接続設定
-$dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
-$user = "user01";
-$pass = "user01";
+$config = require_once 'config/config.php';
+$dsn = $config['dsn'];
+$user= $config['user'];
+$pass= $config['password'];
 
 // SQL文
 $sql = 'SELECT * FROM medium ORDER BY update_time DESC LIMIT 5';
