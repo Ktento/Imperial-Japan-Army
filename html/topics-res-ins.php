@@ -8,7 +8,7 @@ ini_set('error_reporting', E_ALL);
 require_once 'includes/auth.php';
 require_once 'includes/helpers.php';
 
-$topic_id = sanitizeInput($_GET['i'] ?? '');
+$topic_id = sanitizeInput($_GET['ti'] ?? '');
 $title = sanitizeInput($_GET['t'] ?? '');
 $category = sanitizeInput($_GET['c'] ?? '');
 $target = sanitizeInput($_GET['a'] ?? '');
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors = $result;
         } else {
             $success_message = "コメントが正常に登録されました (ID: $result)";
-            header("Location: topics-dtl.php?i=$topic_id&t=$title&c=$category&a=$target");
+            header("Location: topics-dtl.php?ti=$topic_id&t=$title&c=$category&a=$target");
             exit();
         }
     }
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php include 'templates/header.php'; ?>
         <main class="bg-gray-100 p-4 mt-4">
             <h2 class="border-b-2 mb-2 py-2 text-lg">コメント登録</h2>
-            <form action="topics-res-ins.php?i=<?= $topic_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>" method="POST" class="space-y-3">
+            <form action="topics-res-ins.php?ti=<?= $topic_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>" method="POST" class="space-y-3">
                 <fieldset>
                     <dl>
                         <dt class="float-left"></dt>
