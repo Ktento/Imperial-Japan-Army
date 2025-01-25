@@ -50,19 +50,19 @@ function insertMedia($num, $title, $user_id, $category, $target, $tags)
     $errors = [];
 
     // トピックの存在チェック
-    $checkStmt = $pdo->prepare("SELECT media_id FROM medias WHERE media_id = :media_id");
+    $checkStmt = $pdo->prepare("SELECT media_id FROM media WHERE media_id = :media_id");
     $checkStmt->bindValue(':media_id', $num, PDO::PARAM_STR);
     $checkStmt->execute();
 
     if ($checkStmt->fetch(PDO::FETCH_ASSOC)) {
-        $errors[] = "すでに存在するトピックスの登録番号です";
+        $errors[] = "すでに存在するメディアの登録番号です";
         return $errors;
     }
 
     // SQL文の選択
     $sql = empty($num)
-        ? "INSERT INTO medias (user_id, media_title) VALUES (:user_id, :title)"
-        : "INSERT INTO medias (media_id, user_id, media_title) VALUES (:num, :user_id, :title)";
+        ? "INSERT INTO media (user_id, media_title) VALUES (:user_id, :title)"
+        : "INSERT INTO media (media_id, user_id, media_title) VALUES (:num, :user_id, :title)";
 
     $stmt = $pdo->prepare($sql);
 
@@ -74,7 +74,7 @@ function insertMedia($num, $title, $user_id, $category, $target, $tags)
     $stmt->bindValue(':title', $title, PDO::PARAM_STR);
 
     if (!$stmt->execute()) {
-        $errors[] = "新しいトピックの挿入に失敗しました";
+        $errors[] = "新しいメディアの挿入に失敗しました";
         return $errors;
     }
 
