@@ -55,12 +55,13 @@ function deleteComments($topic_comment_id)
         $pdo = null;
     }
 }
-function updateComments($topic_comment_id, $topic_comment)
+function updateComments($topic_comment_id, $comment_category, $topic_comment)
 {
     try {
         $pdo = getPDOConnection();
-        $stmt = $pdo->prepare("UPDATE topic_comment SET topic_comment = :topic_comment WHERE topic_comment_id = :topic_comment_id");
+        $stmt = $pdo->prepare("UPDATE topic_comment SET comment_category = :comment_category, topic_comment = :topic_comment WHERE topic_comment_id = :topic_comment_id");
         $stmt->bindValue(':topic_comment_id', $topic_comment_id, PDO::PARAM_INT);
+        $stmt->bindValue(':comment_category', $comment_category, PDO::PARAM_STR);
         $stmt->bindValue(':topic_comment', $topic_comment, PDO::PARAM_STR);
         if (!$stmt->execute()) {
             $errors[] = "コメントの更新に失敗しました";
@@ -68,7 +69,8 @@ function updateComments($topic_comment_id, $topic_comment)
         }
         return $topic_comment_id;
     } catch (PDOException $e) {
-        echo "接続失敗: " . $e->getMessage() . "\n";
+        $errors[] = "接続失敗: " . $e->getMessage() . "\n";
+        return $errors;
     } finally {
         $pdo = null;
     }

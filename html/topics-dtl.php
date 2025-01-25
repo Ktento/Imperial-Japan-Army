@@ -11,7 +11,7 @@ require_once 'includes/topics.php';
 
 $filename = "topics";
 
-$topic_id = sanitizeInput($_GET['i'] ?? '');
+$topic_id = sanitizeInput($_GET['ti'] ?? '');
 $title = sanitizeInput($_GET['t'] ?? '');
 $category = sanitizeInput($_GET['c'] ?? '');
 $target = sanitizeInput($_GET['a'] ?? '');
