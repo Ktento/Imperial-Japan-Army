@@ -3,13 +3,21 @@
 # 開発者向け情報
 
 ### クエリパラメータの命名規則
+
 $topic_id -> &ti
+
 $media_id ->&mi
+
 &topic_comment_id ->&tci
+
 &media_comment_id ->&mci
+
 $title -> &t
+
 $category -> &c
+
 $target -> &a
+
 $content ->&con
 
 ### `docker compose` を使う場合
