@@ -9,7 +9,8 @@
 //SQL文
 $config = require_once 'config/config.php';
 
-$sql='select * from Users where user_name LIKE :username order by created_at DESC';
+$sql='select * from users where user_name LIKE :username order by created_at DESC';
+
 //DBへの接続
 //DBへの接続
 $dsn = $config['dsn'];
