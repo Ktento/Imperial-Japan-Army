@@ -38,7 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo $errors;
         } else {
             $success_message = "コメントが正常に更新されました (ID: $result)";
-            echo $topic_comment_id;
             header("Location: topics-dtl.php?ti=$topic_id&t=$title&c=$category&a=$target");
             exit();
         }
