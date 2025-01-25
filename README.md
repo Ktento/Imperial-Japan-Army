@@ -2,14 +2,23 @@
 
 # 開発者向け情報
 
-###  `docker compose` を使う場合
+###　 クエリパラメータの命名規則
+$topic_id -> &ti
+$media_id ->&mi
+&topic_comment_id ->&tci
+&media_comment_id ->&mci
+$title -> &t
+$category -> &c
+$target -> &a
+$content ->&con
+
+### `docker compose` を使う場合
 
 #### 依存関係を構築し、プログラムを実行する
 
-データベースの host名をコンテナの名前(mysql_db)にする
+データベースの host 名をコンテナの名前(mysql_db)にする
 
-config/config.phpを以下のように設定してください
-
+config/config.php を以下のように設定してください
 
 ```php
 <?php
@@ -27,4 +36,4 @@ return [
 $ docker compose up -d
 ```
 
-http://localhost:8081 にアクセスすると、phpmyadminにアクセスすることができます。
+http://localhost:8081 にアクセスすると、phpmyadmin にアクセスすることができます。
