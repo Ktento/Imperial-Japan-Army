@@ -20,7 +20,7 @@
             <label for="favtag">タグ:</label>
             <?php
             //SQL文
-            $sql = 'select tag_name from Tags';
+            $sql = 'select tag_name from tags';
             //DBへの接続
             $dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
             $user = "user01";
@@ -59,7 +59,7 @@
     <?php
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         //SQL文
-        $sql = 'INSERT INTO Users (`user_id`, `user_name`, `user_password`, `user_icon`, `favtag`, `user_level`)';
+        $sql = 'INSERT INTO users (`user_id`, `user_name`, `user_password`, `user_icon`, `favtag`, `user_level`)';
         $sql = $sql . 'VALUES (:user_id,:user_name,:user_password,:user_icon,:favtag,:user_level)';
         //DBへの接続
         $dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
