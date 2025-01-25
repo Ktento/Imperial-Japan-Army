@@ -6,9 +6,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     //SQL文
     $sql = 'DELETE FROM media_comment WHERE media_comment_id=:media_comment_id';
     //DBへの接続
-    $dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
-    $user = "user01";
-    $pass = "user01";
+    $config = require_once 'config/config.php';
+    $dsn = $config['dsn'];
+    $user= $config['user'];
+    $pass= $config['password'];
     try {
         //SQLの実行
         $media_comment_id = $_POST['registration-number'];

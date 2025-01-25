@@ -6,9 +6,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // SQL文
     $sql = 'INSERT INTO media_comment (media_id, media_comment, media_category, media_target) VALUES(:media_id, :media_comment, :media_category, :media_target)';
     // DBへの接続
-    $dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
-    $user = "user01";
-    $pass = "user01";
+    $config = require_once 'config/config.php';
+    $dsn = $config['dsn'];
+    $user= $config['user'];
+    $pass= $config['password'];
     try {
         // POSTデータの取得
         $media_id = $_POST['registration-number'];

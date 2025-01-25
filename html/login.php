@@ -16,17 +16,15 @@
 		</form>
 		<?php
 		if ($_SERVER["REQUEST_METHOD"] === "POST") {
+			$config = require_once 'config/config.php';
 			//SQL文
-			$sql = 'select * from Users where user_id = :loginid and user_password =:password';
+			$sql = 'select * from users where user_id = :loginid and user_password =:password';
 			//DBへの接続
-			$dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
-			$user = "user01";
-			$pass = "user01";
 			try {
 				//SQLの実行
 				$loginid = $_POST['loginid'];
 				$password = $_POST['password'];
-				$pdo = new PDO($dsn, $user, $pass);
+				$pdo = new PDO($config['dsn'], $config['user'], $config['password']);
 				//SQLの実行
 				$stmt = $pdo->prepare($sql);
 				$stmt->bindValue(':loginid', $loginid);

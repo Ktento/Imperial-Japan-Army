@@ -8,6 +8,7 @@ ini_set('error_reporting', E_ALL);
 require_once 'includes/auth.php';
 require_once 'includes/top.php';
 
+$config = require_once 'config/config.php';
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -27,9 +28,9 @@ require_once 'includes/top.php';
     </div>
     <?php
     // DBへの接続設定
-    $dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
-    $user = "user01";
-    $pass = "user01";
+    $dsn = $config['dsn'];
+    $user = $config['user'];
+    $pass = $config['password'];
 
     // SQL文
     $topic_sql = 'SELECT topics.topic_id,topic_category.topic_category_name,topic_target.topic_target_name,topics.topic_title,COALESCE(A.コメント件数,0) AS コメント件数 FROM `topics` 
@@ -87,10 +88,9 @@ require_once 'includes/top.php';
     </div>
     <?php
     // DBへの接続設定
-    $dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
-    $user = "user01";
-    $pass = "user01";
-
+    $dsn = $config['dsn'];
+    $user = $config['user'];
+    $pass = $config['password'];
     // SQL文
     $media_sql = 'SELECT media.media_id,media_category.media_category_name,media_target.media_target_name,media.media_title,COALESCE(A.コメント件数,0) AS コメント件数 FROM `media` 
                     LEFT JOIN (SELECT media_id,COUNT(*) as コメント件数 FROM media_comment GROUP BY media_id) as A ON media.media_id=A.media_id 
