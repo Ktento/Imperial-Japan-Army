@@ -66,7 +66,7 @@ $config = require_once 'config/config.php';
             $category = htmlspecialchars($row['topic_category_name'], ENT_QUOTES, 'UTF-8');
 
             $array_tags = fetchTopicTags($topic_id);
-            $tags = htmlspecialchars(implode($array_tags), ENT_QUOTES, 'UTF-8');
+            $tags = htmlspecialchars(implode(',', $array_tags), ENT_QUOTES, 'UTF-8');
 
             echo '<tr class="bg-gray-50">';
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['topic_category_name'], ENT_QUOTES, 'UTF-8') . "</td>";
@@ -132,7 +132,7 @@ $config = require_once 'config/config.php';
             $category = htmlspecialchars($row['media_category_name'], ENT_QUOTES, 'UTF-8');
 
             $array_tags = fetchMediaTags($media_id);
-            $tags = htmlspecialchars(implode($array_tags), ENT_QUOTES, 'UTF-8');
+            $tags = htmlspecialchars(implode(',', $array_tags), ENT_QUOTES, 'UTF-8');
 
             echo '<tr class="bg-gray-50">';
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['media_category_name'], ENT_QUOTES, 'UTF-8') . "</td>";
