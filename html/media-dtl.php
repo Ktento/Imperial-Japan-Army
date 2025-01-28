@@ -59,7 +59,7 @@ require_once 'test/tests.php';
 
             <!-- アクションボタン -->
             <div class="text-sm text-gray-600 mt-6 flex justify-between mb-2">
-                <a href="media-res-ins.php" class="border p-2">コメント新規登録</a>
+                <a href="media-res-ins.php?mi=<?= $media_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>" class="border p-2">コメント新規登録</a>
                 <?php include 'views/pagenation.php'; ?>
             </div>
 
