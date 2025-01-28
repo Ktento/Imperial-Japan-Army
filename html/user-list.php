@@ -36,11 +36,16 @@
 		print("<tr class='bg-gray-100'>");
 		echo ("<th class='border border-gray-300 p-2'>ログインID</th><th class='border border-gray-300 p-2'>ユーザ氏名</th><th class='border border-gray-300 p-2'>レベル</th><th class='border border-gray-300 p-2'>編集</th><th class='border border-gray-300 p-2'>削除</th>");
 		while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$user_id = $result['user_id'];
+			$user_name = $result['user_name'];
+			$role = $result['user_level'];
+
 			print("<tr class='border border-gray-300'>");
-			print("<td class='border border-gray-300 p-2'>" . $result['user_id'] . "</td>");
-			print("<td class='border border-gray-300 p-2'>" . $result['user_name'] . "</td>");
-			print("<td class='border border-gray-300 p-2'><a class='text-blue-500 hover:underline' href='user-upd.php?id=" . $result['user_id'] . "'>編集</a></td>");
-			print("<td class='border border-gray-300 p-2'><a class='text-blue-500 hover:underline' href='user-del.php?id=" . $result['user_id'] . "'>削除</a></td>");
+			print("<td class='border border-gray-300 p-2'>{$user_id}</td>");
+			print("<td class='border border-gray-300 p-2'>{$user_name}</td>");
+			print("<td class='border border-gray-300 p-2'>{$role}</td>");
+			print("<td class='border border-gray-300 p-2'><a class='text-blue-500 hover:underline' href='user-upd.php?i={$user_id}&n={$user_name}&r={$role}'>編集</a></td>");
+			print("<td class='border border-gray-300 p-2'><a class='text-blue-500 hover:underline' href='user-del.php?i={$user_id}&n={$user_name}&r={$role}'>削除</a></td>");
 			print("</tr>");
 		}
 		print("</tr>");
