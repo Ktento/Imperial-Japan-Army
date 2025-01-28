@@ -513,7 +513,7 @@ ALTER TABLE `users`
 -- テーブルの制約 `media`
 --
 ALTER TABLE `media`
-  ADD CONSTRAINT `media_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+  ADD CONSTRAINT `media_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
 --
 -- テーブルの制約 `media_category`
