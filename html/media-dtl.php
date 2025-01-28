@@ -11,7 +11,7 @@ require_once 'includes/media.php';
 
 $filename = "media";
 
-$media_id = sanitizeInput($_GET['i'] ?? '');
+$media_id = sanitizeInput($_GET['mi'] ?? '');
 $title = sanitizeInput($_GET['t'] ?? '');
 $category = sanitizeInput($_GET['c'] ?? '');
 $target = sanitizeInput($_GET['a'] ?? '');
