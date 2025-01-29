@@ -18,7 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim($_POST['title'] ?? '');
     $category = trim($_POST['category'] ?? '');
     $target = trim($_POST['target'] ?? '');
-    $tags = array_map('trim', explode(',', $_POST['tags'] ?? '')) ?? [];
+    $array_tags = array_map('trim', explode(',', $_POST['tags'] ?? '')) ?? [];
+    $tags = htmlspecialchars(implode(',', $array_tags), ENT_QUOTES, 'UTF-8');
+
 
     if (empty($title)) {
         $errors[] = "タイトルを入力してください。";
@@ -33,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errors)) {
-        $result = updateTopic($register_num, $title, $user_id, $category, $target, $tags);
+        $result = updateTopic($register_num, $title, $user_id, $category, $target, $array_tags);
         if (is_array($result)) {
             $errors = $result;
         } else {
