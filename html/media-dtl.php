@@ -9,22 +9,19 @@ require_once 'includes/auth.php';
 require_once 'includes/helpers.php';
 require_once 'includes/media.php';
 
-$media_id = sanitizeInput($_GET['i'] ?? '');
+$filename = "media";
+
+$media_id = sanitizeInput($_GET['mi'] ?? '');
 $title = sanitizeInput($_GET['t'] ?? '');
 $category = sanitizeInput($_GET['c'] ?? '');
 $target = sanitizeInput($_GET['a'] ?? '');
 
 $comments = null;
 
-$items_per_page = 3;
-$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-
 if ($media_id) {
     $total_comments = fetchTotalComments($media_id);
-    $paginationInfo = getPaginationInfo($total_comments, $items_per_page, $page);
-    $comments = fetchComments($media_id, $items_per_page, $paginationInfo['offset']);
+    $comments = fetchComments($media_id);
     $tags = fetchTags($media_id);
-    $total_pages = (int)ceil($total_comments / $items_per_page) ?? 0;
 }
 
 // デバック用
@@ -62,7 +59,7 @@ require_once 'test/tests.php';
 
             <!-- アクションボタン -->
             <div class="text-sm text-gray-600 mt-6 flex justify-between mb-2">
-            <a href="media-res-ins.php?i=<?= $media_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>" class="border p-2">コメント新規登録</a>
+                <a href="media-res-ins.php?mi=<?= $media_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>" class="border p-2">コメント新規登録</a>
                 <?php include 'views/pagenation.php'; ?>
             </div>
 

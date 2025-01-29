@@ -1,60 +1,71 @@
 <?php
+// エラーを出力する
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+?>
+<?php
+
 require_once 'includes/auth.php';
-require_once 'includes/media.php';
 require_once 'includes/helpers.php';
 
-$register_num = sanitizeInput($_GET['mi'] ?? '');
+$topic_comment_id = sanitizeInput($_GET['tci'] ?? '');
+$topic_id = sanitizeInput($_GET['ti'] ?? '');
 $title = sanitizeInput($_GET['t'] ?? '');
 $category = sanitizeInput($_GET['c'] ?? '');
 $target = sanitizeInput($_GET['a'] ?? '');
-$tags = sanitizeInput($_GET['g'] ?? '');
+$content = sanitizeInput($_GET['con'] ?? '');
 
+?>
+<?php
 // エラーメッセージの初期化
 $errors = [];
 $success_message = "";
-
+require_once 'includes/topics-comment.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $register_num = trim($_POST['number'] ?? '');
+    $comment_category = trim($_POST['comment_category'] ?? '');
+    $topic_comment = trim($_POST['topic_comment'] ?? '');
 
-    if (empty($register_num)) {
-        $errors[] = "登録番号を入力してください。";
+    if (empty($topic_comment)) {
+        $errors[] = "コメントは必須です。";
     }
-
+    if (empty($comment_category)) {
+        $errors[] = "種類は必須です。";
+    }
     if (empty($errors)) {
-        $result = deleteMedia($register_num);
+        $result = updateComments($topic_comment_id, $comment_category, $topic_comment);
         if (is_array($result)) {
             $errors = $result;
+            echo $errors;
         } else {
-            $success_message = "メディアが正常に削除されました (ID: $result)";
+            $success_message = "コメントが正常に更新されました (ID: $result)";
+            header("Location: topics-dtl.php?ti=$topic_id&t=$title&c=$category&a=$target");
+            exit();
         }
     }
 }
-?>
 
+?>
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>メディア削除</title>
+    <title>トピック登録</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/path/to/common.css">
 </head>
+
 <body>
     <div class="p-4 mx-12 max-w-6xl min-w-80 mx-auto">
         <?php include 'templates/header.php'; ?>
         <main class="bg-gray-100 p-4 mt-4">
-            <h2 class="border-b-2 mb-2 py-2 text-lg">メディア削除</h2>
-            <form action="media-del.php" method="POST" class="space-y-3">
+            <h2 class="border-b-2 mb-2 py-2 text-lg">コメント登録</h2>
+            <form action="topics-res-upd.php?ti=<?= htmlspecialchars($topic_id) ?>&tci=<?= htmlspecialchars($topic_comment_id) ?>&t=<?= htmlspecialchars($title) ?>&c=<?= htmlspecialchars($category) ?>&a=<?= htmlspecialchars($target) ?>" method="POST" class="space-y-3">
                 <fieldset>
                     <dl>
                         <dt class="float-left"></dt>
                         <dd class="ml-64">
-                            <?php if (!empty($success_message)): ?>
-                                <div class="mb-4 p-3 text-green-600">
-                                    <?= htmlspecialchars($success_message, ENT_QUOTES, 'UTF-8') ?>
-                                </div>
-                            <?php endif; ?>
                             <?php if (!empty($errors)): ?>
                                 <div class="mb-4 p-3 text-red-600">
                                     <ul>
@@ -68,10 +79,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </dl>
                     <dl class="py-2">
                         <dt class="float-left">
-                            <label for="" class="">登録番号:</label>
+                            <label for="" class="">コメント登録番号:</label>
                         </dt>
                         <dd class="ml-64">
-                            <input size="25" type="text" name="number" placeholder="省略可能" class="border text-sm p-1 focus:outline-none focus:border-gray-500 focus:ring-0 focus:ring-gray-500" value="<?= $register_num ?>" readonly>
+                            <?= $topic_comment_id ?>
                         </dd>
                     </dl>
                     <dl class="py-2">
@@ -79,7 +90,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="" class="">タイトル:</label>
                         </dt>
                         <dd class="ml-64">
-                            <input size="25" type="text" name="title" id="title" class="border text-sm p-1 focus:outline-none focus:border-gray-500 focus:ring-0 focus:ring-gray-500" value="<?= $title ?>" readonly>
+                            <?= htmlspecialchars($title) ?>
+                        </dd>
+                    </dl>
+                    <dl class="py-2">
+                        <dt class="float-left">
+                            <label for="" class="">種類:</label>
+                        </dt>
+                        <dd class="ml-64">
+                            <?= htmlspecialchars($category) ?>
+                        </dd>
+                    </dl>
+                    <dl class="py-2">
+                        <dt class="float-left">
+                            <label for="" class="">対象:</label>
+                        </dt>
+                        <dd class="ml-64">
+                            <?= htmlspecialchars($target) ?>
                         </dd>
                     </dl>
                     <dl class="py-2">
@@ -89,50 +116,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <dd class="ml-64">
                             <div class="mt-2 flex items-center gap-2">
                                 <label class="">
-                                    <input <?= $category == "本" ? 'checked' : '' ?> type="radio" name="category" value="本" class="h-4 w-4 text-gray-600 border-gray-300 accent-gray-800" disabled>
-                                    <span class="ml-2 text-gray-700">本</span>
+                                    <input type="radio" name="comment_category" value="感想" class="h-4 w-4 text-gray-600 border-gray-300 accent-gray-800" <?= ($category === '感想') ? 'checked' : '' ?>>
+                                    <span class="ml-2 text-gray-700">感想</span>
                                 </label>
                                 <label class="">
-                                    <input <?= $category == "動画" ? 'checked' : '' ?> type="radio" name="category" value="動画" class="h-4 w-4 text-gray-600 border-gray-300 accent-gray-800" disabled>
-                                    <span class="ml-2 text-gray-700">動画</span>
-                                </label>
-                            </div>
-                        </dd>
-                    </dl>
-                    <dl class="py-2">
-                        <dt class="float-left">
-                            <label for="" class="">対象:</label>
-                        </dt>
-                        <dd class="ml-64">
-                            <div class="mt-2 flex items-center gap-2">
-                                <label class="">
-                                    <input <?= $target == "学生" ? 'checked' : '' ?> type="radio" name="target" value="学生" class="h-4 w-4 text-gray-600 border-gray-300 accent-gray-800" disabled>
-                                    <span class="ml-2 text-gray-700">学生</span>
-                                </label>
-                                <label class="">
-                                    <input <?= $target == "教員" ? 'checked' : '' ?> type="radio" name="target" value="教員" class="h-4 w-4 text-gray-600 border-gray-300 accent-gray-800" disabled>
-                                    <span class="ml-2 text-gray-700">教員</span>
+                                    <input type="radio" name="comment_category" value="質問" class="h-4 w-4 text-gray-600 border-gray-300 accent-gray-800" <?= ($category === '質問') ? 'checked' : '' ?>>
+                                    <span class="ml-2 text-gray-700">質問</span>
                                 </label>
                             </div>
                         </dd>
                     </dl>
                     <dl class="py-2">
                         <dt class="float-left w-60">
-                            <label for="" class="">タグ:</label>
-                            <br>
-                            <span class="text-xs text-gray-900">
-                                タグをコンマ(,)で区切って入力してください<br> 例: PHP, MySQL, プログラミング
-                            </span>
+                            <label for="" class="">コメント:</label>
                         </dt>
                         <dd class="ml-64">
-                            <input size="25" type="text" name="tags" placeholder="PHP, MySQL, プログラミング" class="border text-sm p-1 focus:outline-none focus:border-gray-500 focus:ring-0 focus:ring-gray-500" value="<?= $tags ?>" readonly>
+                            <textarea name="topic_comment" class="w-80 h-40 overflow-y-scroll p-2 text-left resize-none" style="resize: none;">
+                                <?= htmlspecialchars($content) ?>
+                            </textarea>
                         </dd>
                     </dl>
                     <dl class="py-2">
                         <dt class="float-left w-60"></dt>
                         <dd class="ml-64">
                             <button type="submit" class="border border-black py-2 px-4 hover:text-gray-700 bg-white">
-                               削除
+                                更新
                             </button>
                         </dd>
                     </dl>
@@ -142,4 +150,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php include 'templates/footer.php'; ?>
     </div>
 </body>
+
 </html>

@@ -8,6 +8,7 @@ ini_set('error_reporting', E_ALL);
 require_once 'includes/auth.php';
 require_once 'includes/top.php';
 
+$config = require_once 'config/config.php';
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -27,9 +28,9 @@ require_once 'includes/top.php';
     </div>
     <?php
     // DBへの接続設定
-    $dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
-    $user = "user01";
-    $pass = "user01";
+    $dsn = $config['dsn'];
+    $user = $config['user'];
+    $pass = $config['password'];
 
     // SQL文
     $topic_sql = 'SELECT topics.topic_id,topic_category.topic_category_name,topic_target.topic_target_name,topics.topic_title,COALESCE(A.コメント件数,0) AS コメント件数 FROM `topics` 
@@ -59,18 +60,25 @@ require_once 'includes/top.php';
                 </tr>
                </thead><tbody>';
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $id = htmlspecialchars($row['topic_id'], ENT_QUOTES, 'UTF-8');
+            $topic_id = htmlspecialchars($row['topic_id'], ENT_QUOTES, 'UTF-8');
             $title = htmlspecialchars($row['topic_title'], ENT_QUOTES, 'UTF-8');
             $target = htmlspecialchars($row['topic_target_name'], ENT_QUOTES, 'UTF-8');
             $category = htmlspecialchars($row['topic_category_name'], ENT_QUOTES, 'UTF-8');
 
+            $array_tags = fetchTopicTags($topic_id);
+            $tags = htmlspecialchars(implode(',', $array_tags), ENT_QUOTES, 'UTF-8');
+
             echo '<tr class="bg-gray-50">';
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['topic_category_name'], ENT_QUOTES, 'UTF-8') . "</td>";
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['topic_target_name'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-dtl.php?i={$id}&t={$title}&c={$category}&a={$target}'>{$title}</a></td>";
+            echo "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-dtl.php?ti={$topic_id}&t={$title}&c={$category}&a={$target}'>{$title}</a><div class='flex flex-wrap gap-1'>";
+            foreach ($array_tags as $tag) {
+                echo "<span class='px-1 border text-xs'>{$tag}</span>";
+            }         
+            echo "</div></td>";
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['コメント件数'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-upd.php?i={$id}&t={$title}&c={$category}&a={$target}'>編集</a></td>";
-            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-del.php?i={$id}&t={$title}&c={$category}&a={$target}'>削除</a></td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-upd.php?ti={$topic_id}&t={$title}&c={$category}&a={$target}&g={$tags}'>編集</a></td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='topics-del.php?ti={$topic_id}&t={$title}&c={$category}&a={$target}&g={$tags}'>削除</a></td>";
             echo "</tr>";
         }
         echo "</tbody></table>";
@@ -87,10 +95,9 @@ require_once 'includes/top.php';
     </div>
     <?php
     // DBへの接続設定
-    $dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
-    $user = "user01";
-    $pass = "user01";
-
+    $dsn = $config['dsn'];
+    $user = $config['user'];
+    $pass = $config['password'];
     // SQL文
     $media_sql = 'SELECT media.media_id,media_category.media_category_name,media_target.media_target_name,media.media_title,COALESCE(A.コメント件数,0) AS コメント件数 FROM `media` 
                     LEFT JOIN (SELECT media_id,COUNT(*) as コメント件数 FROM media_comment GROUP BY media_id) as A ON media.media_id=A.media_id 
@@ -119,18 +126,25 @@ require_once 'includes/top.php';
                 </tr>
                </thead><tbody>';
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $id = htmlspecialchars($row['media_id'], ENT_QUOTES, 'UTF-8');
+            $media_id = htmlspecialchars($row['media_id'], ENT_QUOTES, 'UTF-8');
             $title = htmlspecialchars($row['media_title'], ENT_QUOTES, 'UTF-8');
             $target = htmlspecialchars($row['media_target_name'], ENT_QUOTES, 'UTF-8');
             $category = htmlspecialchars($row['media_category_name'], ENT_QUOTES, 'UTF-8');
 
+            $array_tags = fetchMediaTags($media_id);
+            $tags = htmlspecialchars(implode(',', $array_tags), ENT_QUOTES, 'UTF-8');
+
             echo '<tr class="bg-gray-50">';
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['media_category_name'], ENT_QUOTES, 'UTF-8') . "</td>";
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['media_target_name'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-dtl.php?i={$id}&t={$title}&c={$category}&a={$target}'>{$title}</a></td>";
+            echo "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-dtl.php?mi={$media_id}&t={$title}&c={$category}&a={$target}'>{$title}</a><div class='flex flex-wrap gap-1'>";
+            foreach ($array_tags as $tag) {
+                echo "<span class='px-1 border text-xs'>{$tag}</span>";
+            }         
+            echo "</div></td>";
             echo '<td class="py-2 px-4 border-b text-sm text-gray-600">' . htmlspecialchars($row['コメント件数'], ENT_QUOTES, 'UTF-8') . "</td>";
-            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-upd.php?i={$id}&t={$title}&c={$category}&a={$target}'>編集</a></td>";
-            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-del.php?i={$id}&t={$title}&c={$category}&a={$target}'>削除</a></td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-upd.php?mi={$media_id}&t={$title}&c={$category}&a={$target}&g={$tags}'>編集</a></td>";
+            echo  "<td class='py-2 px-4 border-b text-sm text-gray-600'><a href='media-del.php?mi={$media_id}&t={$title}&c={$category}&a={$target}&g={$tags}'>削除</a></td>";
             echo "</tr>";
         }
         echo "</table>";

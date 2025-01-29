@@ -9,22 +9,19 @@ require_once 'includes/auth.php';
 require_once 'includes/helpers.php';
 require_once 'includes/topics.php';
 
-$topic_id = sanitizeInput($_GET['i'] ?? '');
+$filename = "topics";
+
+$topic_id = sanitizeInput($_GET['ti'] ?? '');
 $title = sanitizeInput($_GET['t'] ?? '');
 $category = sanitizeInput($_GET['c'] ?? '');
 $target = sanitizeInput($_GET['a'] ?? '');
 
 $comments = null;
 
-$items_per_page = 3;
-$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-
 if ($topic_id) {
     $total_comments = fetchTotalComments($topic_id);
-    $paginationInfo = getPaginationInfo($total_comments, $items_per_page, $page);
-    $comments = fetchComments($topic_id, $items_per_page, $paginationInfo['offset']);
+    $comments = fetchComments($topic_id);
     $tags = fetchTags($topic_id);
-    $total_pages = (int)ceil($total_comments / $items_per_page) ?? 0;
 }
 
 // デバック用
@@ -64,7 +61,7 @@ require_once 'test/tests.php';
 
             <!-- アクションボタン -->
             <div class="text-sm text-gray-600 mt-6 flex justify-between mb-2">
-                <a href="topics-res-ins.php?i=<?= $topic_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>" class="border p-2">コメント新規登録</a>
+                <a href="topics-res-ins.php?ti=<?= $topic_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>" class="border p-2">コメント新規登録</a>
                 <?php include 'views/pagenation.php'; ?>
             </div>
 
