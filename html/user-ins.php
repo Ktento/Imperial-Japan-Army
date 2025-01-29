@@ -44,14 +44,18 @@
                         $stmt->execute();
                         //結果の処理
                         $i = 1;
+                        print("<fieldset>");
+                        print('<div class="flex items-center mb-2">');
                         while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                            print('<input type="radio" id="tag" class="mr-2 h-5 w-5"' . $i . '" name="tag" value=' . $result['tag_name'] . '>' . $result['tag_name']);
-                            if ($i % 5 == 0) {
-                                print("<br>");
+                            print('<input type="radio" id="tag' . $i . '" class="mr-2 h-5 w-5" name="tag" value="' . $result['tag_name'] . '">');
+                            print('<label for="tag' . $i . '" class="text-lg">' . $result['tag_name'] . '</label>');
+
+                            if ($i % 4 == 0) {
+                                print('</div>');
                             }
                             $i++;
                         }
-                        print("<br>");
+                        print("</fieldset>");
                         // foreachの値を変数に格納したい
                     } catch (PDOException $e) {
                         echo "接続失敗: " . $e->getMessage() . "\n";
