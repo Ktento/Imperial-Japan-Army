@@ -3,7 +3,7 @@ require_once 'includes/auth.php';
 require_once 'includes/topics.php';
 require_once 'includes/helpers.php';
 
-$register_num = sanitizeInput($_GET['i'] ?? '');
+$register_num = sanitizeInput($_GET['ti'] ?? '');
 $title = sanitizeInput($_GET['t'] ?? '');
 $category = sanitizeInput($_GET['c'] ?? '');
 $target = sanitizeInput($_GET['a'] ?? '');
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>トピック更新</title>
+    <title>トピック削除</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/path/to/common.css">
 </head>
