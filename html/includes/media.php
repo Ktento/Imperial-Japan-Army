@@ -10,7 +10,8 @@ function fetchTotalComments($mediaId)
     return $stmt->fetchColumn();
 }
 
-function fetchComments($mediaId) {
+function fetchComments($mediaId)
+{
     $pdo = getPDOConnection();
     $stmt = $pdo->prepare('
         SELECT 
