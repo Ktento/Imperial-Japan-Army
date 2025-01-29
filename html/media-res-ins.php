@@ -8,7 +8,7 @@ require_once 'includes/auth.php';//ログイン状態の有無など確認
 require_once 'includes/helpers.php';//ヘルパー関数
 
 
-$media_id = sanitizeInput($_GET['i'] ?? '');
+$media_id = sanitizeInput($_GET['mi'] ?? '');
 $title = sanitizeInput($_GET['t'] ?? '');
 $category = sanitizeInput($_GET['c'] ?? '');
 $target = sanitizeInput($_GET['a'] ?? '');
@@ -46,8 +46,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $success_message = "コメントが正常に登録されました (ID: $result)";
             //トピック詳細ページにリダイレクトする
             //元の情報を表示したいのでGETパラメータを渡す
-            header("Location: media-dtl.php?ti=$media_id&t=$title&c=$category&a=$target");
+            header("Location: media-dtl.php?my=$media_id&t=$title&c=$category&a=$target");
             exit();
+
         }
     }
 }
@@ -70,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php include 'templates/header.php'; ?>
         <main class="bg-gray-100 p-4 mt-4">
             <h2 class="border-b-2 mb-2 py-2 text-lg">コメント登録</h2>
-            <form action="media-res-ins.php?ti=<?= $media_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>" method="POST" class="space-y-3">
+            <form action="media-res-ins.php?mi=<?= $media_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>" method="POST" class="space-y-3">
             <fieldset>
                     <dl>
                         <dt class="float-left"></dt>
