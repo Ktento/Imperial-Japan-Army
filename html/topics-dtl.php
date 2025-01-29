@@ -38,10 +38,10 @@ require_once 'test/tests.php';
 </head>
 
 <body>
-    <div class="p-4 mx-12 max-w-6xl min-w-80 mx-auto">
-        <!-- ヘッダー -->
-        <?php include 'templates/header.php'; ?>
+    <!-- ヘッダー -->
+    <?php include 'templates/header.php'; ?>
 
+    <div class="p-4 mx-12 max-w-6xl min-w-80 mx-auto">
         <?php if (isset($total_comments)): ?>
             <!-- トピック情報 -->
             <?php include 'views/details.php'; ?>

@@ -36,9 +36,9 @@ require_once 'test/tests.php';
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
+    <!-- ヘッダー -->
+    <?php include 'templates/header.php'; ?>
     <div class="p-4 mx-12 max-w-6xl min-w-80 mx-auto">
-        <!-- ヘッダー -->
-        <?php include 'templates/header.php'; ?>
 
         <?php if (isset($total_comments)): ?>
             <!-- メディア情報 -->
