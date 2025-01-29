@@ -22,8 +22,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 // エラーメッセージの初期化
 $errors = [];
 $success_message = "";
+//test
 
 ?>
+
 <!DOCTYPE html>
 <html lang="ja">
 
