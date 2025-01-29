@@ -13,7 +13,7 @@ if ($media_comment_id) {
     if (is_array($result)) {
         $errors = $result;
     } else {
-        $success_message = "トピックが正常に削除されました (ID: $result)";
+        $success_message = "メディアが正常に削除されました (ID: $result)";
         header("Location: media-dtl.php?mi=$media_id&t=$title&c=$category&a=$target");
         exit();
     }
