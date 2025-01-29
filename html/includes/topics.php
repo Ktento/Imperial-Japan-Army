@@ -36,7 +36,7 @@ function fetchTags($topicId) {
         FROM tags
         INNER JOIN topic_tags 
             ON topic_tags.tag_id = tags.tag_id
-        WHERE topic_tags.topic_id = :topic_id
+        WHERE topic_tags.topic_id = :topic_id AND tags.tag_name IS NOT NULL
     ');
     $stmt->bindValue(':topic_id', $topicId, PDO::PARAM_INT);
     $stmt->execute();
