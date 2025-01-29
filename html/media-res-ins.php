@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $success_message = "コメントが正常に登録されました (ID: $result)";
             //トピック詳細ページにリダイレクトする
             //元の情報を表示したいのでGETパラメータを渡す
-            header("Location: media-dtl.php?my=$media_id&t=$title&c=$category&a=$target");
+            header("Location: media-dtl.php?mi=$media_id&t=$title&c=$category&a=$target");
             exit();
 
         }
@@ -71,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php include 'templates/header.php'; ?>
         <main class="bg-gray-100 p-4 mt-4">
             <h2 class="border-b-2 mb-2 py-2 text-lg">コメント登録</h2>
+            <!-- 登録ボタンが押された時の処理 -->
             <form action="media-res-ins.php?mi=<?= $media_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>" method="POST" class="space-y-3">
             <fieldset>
                     <dl>
