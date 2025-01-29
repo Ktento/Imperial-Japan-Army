@@ -10,7 +10,7 @@ $user = $config['user'];
 $pass = $config['password'];
 
 // SQL文
-$tags_sql = 'SELECT DISTINCT tag_name FROM tags';
+$tags_sql = 'SELECT DISTINCT tag_name FROM tags WHERE tag_name IS NOT NULL';
 $topic_sql = 'SELECT * FROM view_topic_comments';
 $media_sql = 'SELECT * FROM view_media_comments';
 
