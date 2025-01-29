@@ -63,7 +63,7 @@ try {
     if (!empty($conditions)) {
         $where_clause = " WHERE " . implode(" AND ", $conditions);
     } else {
-        $where_clause = "";
+        $where_clause = " LIMIT 5";
     }
 
     // SQLを組み立てる
