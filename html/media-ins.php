@@ -50,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
+    <?php include 'templates/header.php'; ?>
     <div class="p-4 mx-12 max-w-6xl min-w-80 mx-auto">
-        <?php include 'templates/header.php'; ?>
         <main class="bg-gray-100 p-4 mt-4">
             <h2 class="border-b-2 mb-2 py-2 text-lg">メディア登録</h2>
             <form action="media-ins.php" method="POST" class="space-y-3">
