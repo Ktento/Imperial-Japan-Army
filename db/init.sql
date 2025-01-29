@@ -577,3 +577,51 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+-- --------------------------------------------------------
+
+--
+-- ビュー用の代替構造 `view_media_comments`
+-- (実際のビューを参照するには下にあります)
+--
+CREATE TABLE `view_media_comments` (
+`id` int
+,`title` varchar(255)
+,`category` varchar(255)
+,`target` varchar(255)
+,`total_count` bigint
+);
+
+-- --------------------------------------------------------
+
+--
+-- ビュー用の代替構造 `view_topic_comments`
+-- (実際のビューを参照するには下にあります)
+--
+CREATE TABLE `view_topic_comments` (
+`id` int
+,`title` varchar(255)
+,`category` varchar(255)
+,`target` varchar(255)
+,`total_count` bigint
+);
+
+-- --------------------------------------------------------
+
+--
+-- ビュー用の構造 `view_media_comments`
+--
+DROP TABLE IF EXISTS `view_media_comments`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`user01`@`%` SQL SECURITY DEFINER VIEW `view_media_comments`  AS SELECT `t`.`media_id` AS `id`, `t`.`media_title` AS `title`, `c`.`media_category_name` AS `category`, `ta`.`media_target_name` AS `target`, count(`tc`.`media_comment_id`) AS `total_count` FROM (((`media` `t` join `media_category` `c` on((`t`.`media_id` = `c`.`media_id`))) join `media_target` `ta` on((`t`.`media_id` = `ta`.`media_id`))) left join `media_comment` `tc` on((`t`.`media_id` = `tc`.`media_id`))) GROUP BY `t`.`media_id`, `c`.`media_category_name`, `ta`.`media_target_name` ORDER BY `t`.`created_at` DESC ;
+
+-- --------------------------------------------------------
+
+--
+-- ビュー用の構造 `view_topic_comments`
+--
+DROP TABLE IF EXISTS `view_topic_comments`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`user01`@`%` SQL SECURITY DEFINER VIEW `view_topic_comments`  AS SELECT `t`.`topic_id` AS `id`, `t`.`topic_title` AS `title`, `c`.`topic_category_name` AS `category`, `ta`.`topic_target_name` AS `target`, count(`tc`.`topic_comment_id`) AS `total_count` FROM (((`topics` `t` join `topic_category` `c` on((`t`.`topic_id` = `c`.`topic_id`))) join `topic_target` `ta` on((`t`.`topic_id` = `ta`.`topic_id`))) left join `topic_comment` `tc` on((`t`.`topic_id` = `tc`.`topic_id`))) GROUP BY `t`.`topic_id`, `c`.`topic_category_name`, `ta`.`topic_target_name` ORDER BY `t`.`created_at` DESC ;
+COMMIT;
