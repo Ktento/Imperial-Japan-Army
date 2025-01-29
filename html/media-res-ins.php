@@ -4,33 +4,64 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 ?>
 <?php
-require_once 'includes/auth.php';
-require_once 'includes/helpers.php';
-require_once 'includes/medias.php';
+require_once 'includes/auth.php';//ログイン状態の有無など確認
+require_once 'includes/helpers.php';//ヘルパー関数
 
-$media_id = sanitizeInput($_GET['i'] ?? '');
+
+$media_id = sanitizeInput($_GET['mi'] ?? '');
 $title = sanitizeInput($_GET['t'] ?? '');
 $category = sanitizeInput($_GET['c'] ?? '');
 $target = sanitizeInput($_GET['a'] ?? '');
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $media_id = $_POST['comment_id'] ?? $media_id;
-    $title = $_POST['title'] ?? $title;
-    $category = $_POST['category'] ?? $category;
-    $target = $_POST['target'] ?? $target;
-}
+?>
+<?php
 // エラーメッセージの初期化
 $errors = [];
 $success_message = "";
+//test
+
+require_once 'includes/media-comment.php';
+//登録ボタンがおされsubmitされた際の処理
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //フォームから送信されたデータを取得
+    $media_comment_id = trim($_POST['comment_id'] ?? '');
+    $comment_category = trim($_POST['comment_category'] ?? '');
+    $media_comment = trim($_POST['media_comment'] ?? '');
+
+    //コメントが空の場合はエラーを返す
+    if (empty($media_comment)) {
+        $errors[] = "コメントは必須です。";
+    }
+    //種類が空の場合はエラーを返す
+    if (empty($comment_category)) {
+        $errors[] = "種類は必須です。";
+    }
+    //エラーがない場合はコメントを登録する
+    if (empty($errors)) {
+        $result = insertComments($media_comment_id, $media_id, $user_id, $comment_category, $media_comment);
+        if (is_array($result)) {
+            $errors = $result;
+        } else {
+            //コメントが正常に登録された場合はトピック詳細ページにリダイレクトする
+            $success_message = "コメントが正常に登録されました (ID: $result)";
+            //トピック詳細ページにリダイレクトする
+            //元の情報を表示したいのでGETパラメータを渡す
+            header("Location: media-dtl.php?mi=$media_id&t=$title&c=$category&a=$target");
+            exit();
+
+        }
+    }
+}
 
 ?>
+
 <!DOCTYPE html>
 <html lang="ja">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>トピック登録</title>
+    <title>メディア登録</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/path/to/common.css">
 </head>
@@ -40,8 +71,23 @@ $success_message = "";
         <?php include 'templates/header.php'; ?>
         <main class="bg-gray-100 p-4 mt-4">
             <h2 class="border-b-2 mb-2 py-2 text-lg">コメント登録</h2>
-            <form action="media-res-ins.php" method="POST" class="space-y-3">
-                <fieldset>
+            <!-- 登録ボタンが押された時の処理 -->
+            <form action="media-res-ins.php?mi=<?= $media_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>" method="POST" class="space-y-3">
+            <fieldset>
+                    <dl>
+                        <dt class="float-left"></dt>
+                        <dd class="ml-64">
+                            <?php if (!empty($errors)): ?>
+                                <div class="mb-4 p-3 text-red-600">
+                                    <ul>
+                                        <?php foreach ($errors as $error): ?>
+                                            <li><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            <?php endif; ?>
+                        </dd>
+                    </dl>
                     <dl class="py-2">
                         <dt class="float-left">
                             <label for="" class="">登録番号:</label>
@@ -55,6 +101,7 @@ $success_message = "";
                             <label for="" class="">タイトル:</label>
                         </dt>
                         <dd class="ml-64">
+                            <!-- 初回読み取り時に取得したGETパラメータを表示する -->
                             <?= htmlspecialchars($title) ?>
                         </dd>
                     </dl>
@@ -124,40 +171,3 @@ $success_message = "";
 </body>
 
 </html>
-
-<?php
-require_once 'includes/auth.php';
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    //SQL文
-    $sql = 'INSERT INTO media_comment(media_comment_id,media_id, user_id, comment_category, media_comment) VALUES(:media_comment_id,:media_id, :user_id, :comment_category, :media_comment)';
-    //DBへの接続
-    $dsn = 'mysql:host=localhost;dbname=artifact;charset=utf8';
-    $user = "user01";
-    $pass = "user01";
-    try {
-        //SQLの実行
-        $media_comment_id = $_POST['comment_id'];
-        $comment_category = $_POST['comment_category'];
-        $media_comment = $_POST['media_comment'];
-        $pdo = new PDO($dsn, $user, $pass);
-        //SQLの実行
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':media_comment_id', $media_comment_id);
-        $stmt->bindValue(':media_id', $media_id);
-        $stmt->bindValue(':user_id', $user_id);
-        $stmt->bindValue(':comment_category', $comment_category);
-        $stmt->bindValue(':media_comment', $media_comment);
-        if ($stmt->execute()) {
-            echo "挿入成功";
-        } else {
-            echo "挿入失敗";
-        }
-        // foreachの値を変数に格納したい
-    } catch (PDOException $e) {
-        echo "接続失敗: " . $e->getMessage() . "\n";
-    } finally {
-        // DB接続を閉じる
-        $pdo = null;
-    }
-}
-?>

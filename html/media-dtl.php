@@ -64,7 +64,7 @@ require_once 'test/tests.php';
             </div>
 
             <!-- コメント一覧 -->
-            <?php include 'views/comments.php'; ?>
+            <?php include 'views/media-comments.php'; ?>
 
             <!-- アクションボタン -->
             <div class="text-sm text-gray-600 mt-6 flex justify-between">
