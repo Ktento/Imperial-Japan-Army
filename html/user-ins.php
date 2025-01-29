@@ -8,8 +8,9 @@
     </head>
 
     <body>
+        <?php include 'templates/header.php'; ?>
 
-        <body class="bg-gray-100 p-8 flex items-center justify-center min-h-screen">
+        <div class="bg-gray-100 p-8 flex items-center justify-center min-h-screen">
             <form method="POST" class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
                 <h2 class="text-lg font-semibold mb-4">ユーザー登録</h2>
                 <label for="user_id" class="block text-sm font-medium text-gray-700">ログインID:</label>
@@ -62,7 +63,8 @@
                 </div>
                 <input type="submit" value="登録" class="mt-6 w-full bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600" />
             </form>
-        </body>
+        </div>
+    </body>
 
     </html>
 
