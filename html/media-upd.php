@@ -18,7 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim($_POST['title'] ?? '');
     $category = trim($_POST['category'] ?? '');
     $target = trim($_POST['target'] ?? '');
-    $tags = array_map('trim', explode(',', $_POST['tags'] ?? '')) ?? [];
+    $array_tags = array_map('trim', explode(',', $_POST['tags'] ?? '')) ?? [];
+    $tags = htmlspecialchars(implode(',', $array_tags), ENT_QUOTES, 'UTF-8');
 
     if (empty($title)) {
         $errors[] = "タイトルを入力してください。";
@@ -33,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errors)) {
-        $result = updateMedia($register_num, $title, $user_id, $category, $target, $tags);
+        $result = updateMedia($register_num, $title, $user_id, $category, $target, $array_tags);
         if (is_array($result)) {
             $errors = $result;
         } else {
@@ -45,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/path/to/common.css">
 </head>
+
 <body>
     <div class="p-4 mx-12 max-w-6xl min-w-80 mx-auto">
         <?php include 'templates/header.php'; ?>
@@ -144,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <dt class="float-left w-60"></dt>
                         <dd class="ml-64">
                             <button type="submit" class="border border-black py-2 px-4 hover:text-gray-700 bg-white">
-                               更新
+                                更新
                             </button>
                         </dd>
                     </dl>
@@ -154,4 +157,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php include 'templates/footer.php'; ?>
     </div>
 </body>
+
 </html>

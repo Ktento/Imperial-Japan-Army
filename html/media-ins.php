@@ -29,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         $result = insertMedia($register_num, $title, $user_id, $category, $target, $tags);
+
         if (is_array($result)) {
             $errors = $result;
         } else {
@@ -40,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,8 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <span class="ml-2 text-gray-700">本</span>
                                 </label>
                                 <label class="">
-                                    <input type="radio" name="category" value="教員" class="h-4 w-4 text-gray-600 border-gray-300 accent-gray-800">
-                                    <span class="ml-2 text-gray-700">教員</span>
+                                    <input type="radio" name="category" value="動画" class="h-4 w-4 text-gray-600 border-gray-300 accent-gray-800">
+                                    <span class="ml-2 text-gray-700">動画</span>
                                 </label>
                             </div>
                         </dd>
@@ -146,6 +148,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </fieldset>
             </form>
         </main>
+        <div class="text-sm text-gray-600 mt-6 flex justify-between">
+            <a href="top.php">トップへ戻る</a>
+        </div>
         <?php include 'templates/footer.php'; ?>
     </div>
 </body>

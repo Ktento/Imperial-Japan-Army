@@ -11,7 +11,7 @@ require_once 'includes/media.php';
 
 $filename = "media";
 
-$media_id = sanitizeInput($_GET['i'] ?? '');
+$media_id = sanitizeInput($_GET['mi'] ?? '');
 $title = sanitizeInput($_GET['t'] ?? '');
 $category = sanitizeInput($_GET['c'] ?? '');
 $target = sanitizeInput($_GET['a'] ?? '');
@@ -59,12 +59,12 @@ require_once 'test/tests.php';
 
             <!-- アクションボタン -->
             <div class="text-sm text-gray-600 mt-6 flex justify-between mb-2">
-                <a href="media-res-ins.php" class="border p-2">コメント新規登録</a>
+                <a href="media-res-ins.php?mi=<?= $media_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>" class="border p-2">コメント新規登録</a>
                 <?php include 'views/pagenation.php'; ?>
             </div>
 
             <!-- コメント一覧 -->
-            <?php include 'views/comments.php'; ?>
+            <?php include 'views/media-comments.php'; ?>
 
             <!-- アクションボタン -->
             <div class="text-sm text-gray-600 mt-6 flex justify-between">
