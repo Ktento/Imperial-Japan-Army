@@ -23,8 +23,11 @@
 
             $array_tags = $filename == "topics"  ? fetchTopicTags($id) : fetchMediaTags($id);
             $tags = htmlspecialchars(implode(',', $array_tags), ENT_QUOTES, 'UTF-8');
-
-            $detail_url = "{$filename}-dtl.php?ti={$id}&t={$title}&c={$category}&a={$target}";
+            
+            $initial = $filename == "topics" ? "t" : "m"; 
+            $detail_url = "{$filename}-dtl.php?{$initial}i={$id}&t={$title}&c={$category}&a={$target}";
+            $upd_url = "{$filename}-upd.php?{$initial}i={$id}&t={$title}&c={$category}&a={$target}&g={$tags}";
+            $del_url = "{$filename}-upd.php?{$initial}i={$id}&t={$title}&c={$category}&a={$target}&g={$tags}";
         ?>
         <tr class="bg-gray-50">
             <td class="py-2 px-4 border-b text-sm text-gray-600"><?= $category ?></td>
@@ -40,8 +43,8 @@
                 </div>
             </td>
             <td class="py-2 px-4 border-b text-sm text-gray-600"><?= $comment_count ?></td>
-            <td class='py-2 px-4 border-b text-sm text-gray-600'><a href='<?= $filename ?>-upd.php?ti={$topic_id}&t={$title}&c={$category}&a={$target}&g={$tags}'>編集</a></td>
-            <td class='py-2 px-4 border-b text-sm text-gray-600'><a href='<?= $filename ?>-del.php?ti={$topic_id}&t={$title}&c={$category}&a={$target}&g={$tags}'>削除</a></td>
+            <td class='py-2 px-4 border-b text-sm text-gray-600'><a href='<?= $upd_url ?>'>編集</a></td>
+            <td class='py-2 px-4 border-b text-sm text-gray-600'><a href='<?= $del_url ?>'>削除</a></td>
         </tr>
         <?php endforeach; ?>
     </tbody>
