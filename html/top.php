@@ -31,11 +31,13 @@ try {
     if (!empty($_GET['qc'])) {
         $conditions[] = "category = :category";
         $params[':category'] = $_GET['qc'];
+        $fillter = $_GET['qc'];
     }
 
     if (!empty($_GET['qt'])) {
         $conditions[] = "target = :target";
         $params[':target'] = $_GET['qt'];
+        $fillter = $_GET['qt'];
     }
 
     // 'tag_name' フィルタリング条件
@@ -57,6 +59,7 @@ try {
 
                         
         $params[':tag_name'] = $_GET['tags'];
+        $fillter = $_GET['tags'];
     }
 
     // WHERE 句を組み立て
@@ -130,6 +133,10 @@ try {
             </div>
         </aside>
         <div class="w-full lg:w-3/4 px-4">
+            <?php if (isset($fillter)): ?>
+                <h1 class="text-3xl font-bold mb-4 text-gray-800"><?= $fillter ?></h1>
+            <?php endif; ?>
+
             <?php
                 $name = "トピック";
                 $filename = "topics";
