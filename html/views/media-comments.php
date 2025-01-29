@@ -29,7 +29,7 @@
                 <div class="flex space-x-2">
                     <a class="p-1 text-xs border border-gray-300 hover:bg-gray-200" href="<?= $filename ?>-res-upd.php?mi=<?= $media_id ?>&mci=<?= $comment_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>&con=<?= $content ?>">編集</a>
                     <a class="p-1 text-xs border border-red-300 text-red-600 hover:bg-red-200"
-                        href="<?= $filename ?>-res-del.php?tci=<?= $comment_id ?>&ti=<?= $media_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>"
+                        href="<?= $filename ?>-res-del.php?mci=<?= $comment_id ?>&mi=<?= $media_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>"
                         onclick="return confirm('本当に削除しますか？');">削除</a>
                 </div>
             </div>
