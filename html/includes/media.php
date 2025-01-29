@@ -135,7 +135,7 @@ function updateMedia($num, $title, $user_id, $category, $target, $tags)
     $errors = [];
 
     // トピックの存在チェック
-    $checkStmt = $pdo->prepare("SELECT media_id FROM medias WHERE media_id = :media_id");
+    $checkStmt = $pdo->prepare("SELECT media_id FROM media WHERE media_id = :media_id");
     $checkStmt->bindValue(':media_id', $num, PDO::PARAM_STR);
     $checkStmt->execute();
 
@@ -144,7 +144,7 @@ function updateMedia($num, $title, $user_id, $category, $target, $tags)
         return $errors;
     }
 
-    $stmt = $pdo->prepare("UPDATE medias SET media_title = :title WHERE media_id = :num");
+    $stmt = $pdo->prepare("UPDATE media SET media_title = :title WHERE media_id = :num");
     $stmt->bindValue(':num', $num, PDO::PARAM_INT);
     $stmt->bindValue(':title', $title, PDO::PARAM_STR);
 
@@ -199,7 +199,7 @@ function deleteMedia($media_id)
     $errors = [];
 
     // トピックの存在チェック
-    $checkStmt = $pdo->prepare("SELECT media_id FROM medias WHERE media_id = :media_id");
+    $checkStmt = $pdo->prepare("SELECT media_id FROM media WHERE media_id = :media_id");
     $checkStmt->bindValue(':media_id', $media_id, PDO::PARAM_STR);
     $checkStmt->execute();
 
@@ -208,7 +208,7 @@ function deleteMedia($media_id)
         return $errors;
     }
 
-    $stmt = $pdo->prepare("DELETE FROM medias WHERE media_id = :media_id");
+    $stmt = $pdo->prepare("DELETE FROM media WHERE media_id = :media_id");
     $stmt->bindValue(':media_id', $media_id, PDO::PARAM_INT);
 
     if (!$stmt->execute()) {
