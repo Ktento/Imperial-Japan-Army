@@ -37,7 +37,7 @@ function fetchTags($mediaId)
         SELECT tags.tag_name
         FROM tags
         INNER JOIN media_tags ON media_tags.tag_id = tags.tag_id
-        WHERE media_tags.media_id = :media_id
+        WHERE media_tags.media_id = :media_id AND tags.tag_name IS NOT NULL
     ');
     $stmt->bindValue(':media_id', $mediaId, PDO::PARAM_INT);
     $stmt->execute();

@@ -22,7 +22,7 @@ function fetchTopicTags($topicId) {
         FROM tags
         INNER JOIN topic_tags 
             ON topic_tags.tag_id = tags.tag_id
-        WHERE topic_tags.topic_id = :topic_id
+        WHERE topic_tags.topic_id = :topic_id AND tags.tag_name IS NOT NULL
     ');
     $stmt->bindValue(':topic_id', $topicId, PDO::PARAM_INT);
     $stmt->execute();
@@ -36,7 +36,7 @@ function fetchMediaTags($mediaId) {
         FROM tags
         INNER JOIN media_tags 
             ON media_tags.tag_id = tags.tag_id
-        WHERE media_tags.media_id = :media_id
+        WHERE media_tags.media_id = :media_id AND tags.tag_name IS NOT NULL
     ');
     $stmt->bindValue(':media_id', $mediaId, PDO::PARAM_INT);
     $stmt->execute();
