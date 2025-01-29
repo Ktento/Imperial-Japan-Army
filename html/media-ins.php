@@ -146,6 +146,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </fieldset>
             </form>
         </main>
+        <div class="text-sm text-gray-600 mt-6 flex justify-between">
+            <a href="top.php">トップへ戻る</a>
+        </div>
         <?php include 'templates/footer.php'; ?>
     </div>
 </body>
