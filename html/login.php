@@ -7,8 +7,10 @@
 		<script src="https://cdn.tailwindcss.com"></script>
 	</head>
 
-	<body class="flex items-center justify-center h-screen bg-gray-100">
-		<div class="bg-white p-8 rounded-lg shadow-md w-96">
+	<body>
+		<?php include 'templates/header.php'; ?>
+		<br><br><br><br><br><br>
+		<div class="bg-white p-8 rounded-lg shadow-md w-96 mx-auto">
 			<form method="POST">
 				<label for="loginid" class="block text-sm font-medium text-gray-700">ログインID:</label>
 				<input type="text" id="loginid" name="loginid" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" /><br>
