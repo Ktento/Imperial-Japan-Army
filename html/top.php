@@ -104,37 +104,37 @@ try {
 
 <body>
     <?php include 'templates/header.php'; ?>
-    <div class="container mx-auto flex mt-8">
+    <div class="container mx-auto flex mt-8 text-gray-800">
         <aside class="w-1/4  p-4 hidden lg:block space-y-2 text-gray-600">
             <div class="bg-white shadow rounded p-4">
                 <h2 class="text-lg font-bold mb-4">種類</h2>
                 <ul class="space-y-2">
-                    <li><a href="top.php?qc=お知らせ" class="hover:text-green-500">お知らせ</a></li>
-                    <li><a href="top.php?qc=ニュース" class="hover:text-green-500">ニュース</a></li>
-                    <li><a href="top.php?qc=本" class="hover:text-green-500">本</a></li>
-                    <li><a href="top.php?qc=動画" class="hover:text-green-500">動画</a></li>
+                    <li><a href="top.php?qc=お知らせ" class="hover:text-blue-500">お知らせ</a></li>
+                    <li><a href="top.php?qc=ニュース" class="hover:text-blue-500">ニュース</a></li>
+                    <li><a href="top.php?qc=本" class="hover:text-blue-500">本</a></li>
+                    <li><a href="top.php?qc=動画" class="hover:text-blue-500">動画</a></li>
                 </ul>
             
             </div>
             <div class="bg-white shadow rounded p-4">
                 <h2 class="text-lg font-bold mb-4">対象</h2>
                 <ul class="space-y-2">
-                    <li><a href="top.php?qt=学生" class="hover:text-green-500">学生</a></li>
-                    <li><a href="top.php?qt=教員" class="hover:text-green-500">教員</a></li>
+                    <li><a href="top.php?qt=学生" class="hover:text-blue-500">学生</a></li>
+                    <li><a href="top.php?qt=教員" class="hover:text-blue-500">教員</a></li>
                 </ul>
             </div>
             <div class="p-4">
                 <h2 class="text-lg font-bold mb-4">タグ一覧</h2>
                 <ul class="space-y-2">
                     <?php foreach ($tags as $tag): ?>
-                        <li><a href="top.php?tags=<?= $tag['tag_name'] ?>" class="hover:text-green-500"><?= htmlspecialchars($tag['tag_name'], ENT_QUOTES, 'UTF-8') ?></a></li>
+                        <li><a href="top.php?tags=<?= $tag['tag_name'] ?>" class="hover:text-blue-500"><?= htmlspecialchars($tag['tag_name'], ENT_QUOTES, 'UTF-8') ?></a></li>
                     <?php endforeach; ?>
                 </ul>
             </div>
         </aside>
         <div class="w-full lg:w-3/4 px-4">
             <?php if (isset($fillter)): ?>
-                <h1 class="text-3xl font-bold mb-4 text-gray-800"><?= $fillter ?></h1>
+                <h1 class="text-3xl font-bold mb-4"><?= $fillter ?></h1>
             <?php endif; ?>
 
             <?php
