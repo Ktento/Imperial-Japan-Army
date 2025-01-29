@@ -70,8 +70,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php include 'templates/header.php'; ?>
         <main class="bg-gray-100 p-4 mt-4">
             <h2 class="border-b-2 mb-2 py-2 text-lg">コメント登録</h2>
-            <form action="media-res-ins.php" method="POST" class="space-y-3">
-                <fieldset>
+            <form action="media-res-ins.php?ti=<?= $media_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>" method="POST" class="space-y-3">
+            <fieldset>
+                    <dl>
+                        <dt class="float-left"></dt>
+                        <dd class="ml-64">
+                            <?php if (!empty($errors)): ?>
+                                <div class="mb-4 p-3 text-red-600">
+                                    <ul>
+                                        <?php foreach ($errors as $error): ?>
+                                            <li><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            <?php endif; ?>
+                        </dd>
+                    </dl>
                     <dl class="py-2">
                         <dt class="float-left">
                             <label for="" class="">登録番号:</label>
@@ -85,6 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="" class="">タイトル:</label>
                         </dt>
                         <dd class="ml-64">
+                            <!-- 初回読み取り時に取得したGETパラメータを表示する -->
                             <?= htmlspecialchars($title) ?>
                         </dd>
                     </dl>
@@ -154,4 +169,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </body>
 
 </html>
-
