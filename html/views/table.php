@@ -27,7 +27,7 @@
             $initial = $filename == "topics" ? "t" : "m"; 
             $detail_url = "{$filename}-dtl.php?{$initial}i={$id}&t={$title}&c={$category}&a={$target}";
             $upd_url = "{$filename}-upd.php?{$initial}i={$id}&t={$title}&c={$category}&a={$target}&g={$tags}";
-            $del_url = "{$filename}-upd.php?{$initial}i={$id}&t={$title}&c={$category}&a={$target}&g={$tags}";
+            $del_url = "{$filename}-del.php?{$initial}i={$id}&t={$title}&c={$category}&a={$target}&g={$tags}";
         ?>
         <tr class="bg-gray-50">
             <td class="py-2 px-4 border-b text-sm text-gray-600"><?= $category ?></td>
