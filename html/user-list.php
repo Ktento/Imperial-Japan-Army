@@ -7,6 +7,7 @@
 </head>
 
 <body>
+	<?php include 'includes/auth.php'; ?>
 	<?php include 'templates/header.php'; ?>
 	<form action="user-list.php" method="post" class="mb-4">
 		<input type="text" class="border rounded p-2" name="user_name" value="<?php echo htmlspecialchars($_POST['user_name'] ?? ''); ?>">

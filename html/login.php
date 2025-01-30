@@ -8,6 +8,7 @@
 	</head>
 
 	<body>
+		<?php include 'includes/auth.php'; ?>
 		<?php include 'templates/header.php'; ?>
 		<br><br><br><br><br><br>
 		<div class="bg-white p-8 rounded-lg shadow-md w-96 mx-auto">
@@ -48,6 +49,7 @@
 						$_SESSION['is_logged_in'] = true;
 						$_SESSION['user_name'] = $user_name;
 						$_SESSION['role'] = $rool;
+						echo $_SESSION['role'];
 						header("Location: top.php");
 						exit();
 					} else {

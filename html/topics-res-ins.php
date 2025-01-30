@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //フォームから送信されたデータを取得
     $topic_comment_id = trim($_POST['comment_id'] ?? '');
     $comment_category = trim($_POST['comment_category'] ?? '');
-    $topic_comment = trim($_POST['topic_comment'] ?? '');
+    $topic_comment = ($_POST['topic_comment'] ?? '');
 
     //コメントが空の場合はエラーを返す
     if (empty($topic_comment)) {
@@ -69,6 +69,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="p-4 mx-12 max-w-6xl min-w-80 mx-auto">
         <?php include 'templates/header.php'; ?>
+        <?php if (!$isAdmin): ?>
+            <div class="bg-gray-100 p-4 mt-4 text-gray-700">
+                <h2 class="border-b-2 mb-2 py-2 text-lg">インフォメーション</h2>
+                <p class="text-sm">管理者権限が必要です</p>
+            </div>
+        <?php else: ?>
         <main class="bg-gray-100 p-4 mt-4">
             <h2 class="border-b-2 mb-2 py-2 text-lg">コメント登録</h2>
             <!-- 登録ボタンがおされた後再度詳細を表示するためにGETパラメータを渡す -->
@@ -151,8 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="" class="">コメント:</label>
                         </dt>
                         <dd class="ml-64">
-                            <textarea name="topic_comment" class="w-80 h-40 overflow-y-scroll p-2 text-left resize-none" style="resize: none;">
-                            </textarea>
+                            <textarea name="topic_comment" class="w-80 h-40 overflow-y-scroll p-2 text-left resize-none" style="resize: none;"></textarea>
                         </dd>
                     </dl>
                     <dl class="py-2">
@@ -166,6 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </fieldset>
             </form>
         </main>
+        <?php endif; ?>
         <?php include 'templates/footer.php'; ?>
     </div>
 </body>

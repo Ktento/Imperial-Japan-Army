@@ -7,7 +7,7 @@
     <?php foreach ($comments as $comment):
         $comment_id = htmlspecialchars($comment['comment_id'] ?? "0", ENT_QUOTES, 'UTF-8');
         $name = htmlspecialchars($comment['user_name'] ?? "取得できませんでした", ENT_QUOTES, 'UTF-8');
-        $content = htmlspecialchars($comment['comment'] ?? "取得できませんでした", ENT_QUOTES, 'UTF-8');
+        $content = nl2br($comment['comment']) ?? "取得できませんでした";
         $created_at = htmlspecialchars(formatJapaneseDate($comment['created_at']) ?? "取得できませんでした", ENT_QUOTES, 'UTF-8');
         $category = htmlspecialchars($comment['comment_category'] ?? "取得できませんでした", ENT_QUOTES, 'UTF-8');
     ?>
@@ -27,10 +27,13 @@
                     <p class="mt-2 text-gray-800"><?= $content ?></p>
                 </div>
                 <div class="flex space-x-2">
-                    <a class="p-1 text-xs border border-gray-300 hover:bg-gray-200" href="<?= $filename ?>-res-upd.php?mi=<?= $media_id ?>&mci=<?= $comment_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>&con=<?= $content ?>">編集</a>
-                    <a class="p-1 text-xs border border-red-300 text-red-600 hover:bg-red-200"
-                        href="<?= $filename ?>-res-del.php?mci=<?= $comment_id ?>&mi=<?= $media_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>"
-                        onclick="return confirm('本当に削除しますか？');">削除</a>
+                    <?php if (!$isAdmin): ?>
+                        <a class="p-1 text-xs border border-gray-300 hover:bg-gray-200">編集</a>
+                        <a class="p-1 text-xs border border-red-300 text-red-600 hover:bg-red-200">削除</a>
+                    <?php else: ?>
+                        <a class="p-1 text-xs border border-gray-300 hover:bg-gray-200" href="<?= $filename ?>-res-upd.php?mci=<?= $comment_id ?>&mi=<?= $media_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>">編集</a>
+                        <a class=" p-1 text-xs border border-red-300 text-red-600 hover:bg-red-200" href="<?= $filename ?>-res-del.php?mci=<?= $comment_id ?>&mi=<?= $media_id ?>&t=<?= $title ?>&c=<?= $category ?>&a=<?= $target ?>" onclick="return confirm('本当に削除しますか？');">削除</a>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="w-1/4 text-left text-xs text-gray-600 space-y-1 pl-6">

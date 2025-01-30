@@ -59,6 +59,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="p-4 mx-12 max-w-6xl min-w-80 mx-auto">
         <?php include 'templates/header.php'; ?>
+        <?php if (!$isAdmin): ?>
+            <div class="bg-gray-100 p-4 mt-4 text-gray-700">
+                <h2 class="border-b-2 mb-2 py-2 text-lg">インフォメーション</h2>
+                <p class="text-sm">管理者権限が必要です</p>
+            </div>
+        <?php else: ?>
         <main class="bg-gray-100 p-4 mt-4">
             <h2 class="border-b-2 mb-2 py-2 text-lg">コメント登録</h2>
             <form action="topics-res-upd.php?ti=<?= htmlspecialchars($topic_id) ?>&tci=<?= htmlspecialchars($topic_comment_id) ?>&t=<?= htmlspecialchars($title) ?>&c=<?= htmlspecialchars($category) ?>&a=<?= htmlspecialchars($target) ?>" method="POST" class="space-y-3">
@@ -131,9 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="" class="">コメント:</label>
                         </dt>
                         <dd class="ml-64">
-                            <textarea name="topic_comment" class="w-80 h-40 overflow-y-scroll p-2 text-left resize-none" style="resize: none;">
-                                <?= htmlspecialchars($content) ?>
-                            </textarea>
+                            <textarea name="topic_comment" class="w-80 h-40 overflow-y-scroll p-2 text-left resize-none" style="resize: none;"><?= htmlspecialchars($content) ?></textarea>
                         </dd>
                     </dl>
                     <dl class="py-2">
@@ -147,6 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </fieldset>
             </form>
         </main>
+        <?php endif; ?>
         <?php include 'templates/footer.php'; ?>
     </div>
 </body>

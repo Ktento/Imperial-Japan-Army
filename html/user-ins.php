@@ -8,10 +8,19 @@
     </head>
 
     <body>
+        <?php include 'includes/auth.php'; ?>
         <?php include 'templates/header.php'; ?>
+        <?php
+        $error = '';
+        ?>
 
         <div class="bg-gray-100 p-8 flex items-center justify-center min-h-screen">
             <form method="POST" class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+                <?php if ($error): ?>
+                    <div class="bg-red-100 p-4 rounded-lg mb-4">
+                        <p class="text-red-700"><?= $error ?></p>
+                    </div>
+                <?php endif; ?>
                 <h2 class="text-lg font-semibold mb-4">ユーザー登録</h2>
                 <label for="user_id" class="block text-sm font-medium text-gray-700">ログインID:</label>
                 <input type="text" id="user_id" name="user_id" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" /><br>
@@ -30,7 +39,7 @@
                     $config = require_once 'config/config.php';
 
                     //SQL文
-                    $sql = 'select tag_name from tags';
+                    $sql = 'select tag_name from tags where tag_name is not null';
                     //DBへの接続
                     $dsn = $config['dsn'];
                     $user = $config['user'];
@@ -111,7 +120,7 @@
                 header("Location: top.php");
                 exit();
             } else {
-                echo "既にアカウントが存在しています。";
+                $error = "既にアカウントが存在しています。";
             }
 
             // foreachの値を変数に格納したい
